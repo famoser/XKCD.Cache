@@ -1,0 +1,31 @@
+#excluding files from package manages
+vendor
+node_modules
+
+#excluding IDE files
+.idea
+
+#excluding SLIM framework files
+app/cache/*
+app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+
+
+#excluding runtime data
+app/data/*
+!app/data/.gitkeep
+
+#ecluding precompiled asset files 
+src/public/dist/css/pre/
+src/public/dist/fonts/pre/
+src/public/dist/js/pre/
+
+#excluding deployment files
+servers.yml
+
+#excluding test data
+build/logs/clover.xml
+mail-*-*-*.txt
+
+build/

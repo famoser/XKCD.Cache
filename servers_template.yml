@@ -1,0 +1,26 @@
+production:
+  host: ftp.myserver.ch
+  port: 22
+  user: myuser
+  password: mypass
+  branch: master
+  stage: production
+  deploy_path: ~/www/deploy/cache.xkcd.myserver.ch/production
+
+testing:
+  host: ftp.myserver.ch
+  port: 22
+  user: myuser
+  password: mypass
+  branch: master
+  stage: testing
+  deploy_path: ~/www/deploy/cache.xkcd.myserver.ch/testing
+
+dev:
+  host: ftp.myserver.ch
+  port: 22
+  user: myuser
+  password: mypass
+  branch: develop
+  stage: dev
+  deploy_path: ~/www/deploy/cache.xkcd.myserver.ch/dev
