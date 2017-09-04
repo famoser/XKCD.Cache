@@ -63,6 +63,13 @@ interface SettingServiceInterface
     public function getPublicPath();
 
     /**
+     * get the path which is the root of the PSR namespace
+     *
+     * @return string
+     */
+    public function getSrcPath();
+
+    /**
      * get the path where the xkcd images should be cached
      *
      * @return string

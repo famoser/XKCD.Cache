@@ -16,6 +16,7 @@ use Famoser\XKCD\Cache\Entities\User;
 use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
 use Famoser\XKCD\Cache\Tests\ServiceTests\Base\BaseTestService;
 use Famoser\XKCD\Cache\Tests\TestHelpers\FrontendTestHelper;
+use Famoser\XKCD\Cache\Tests\TestHelpers\SampleGenerator;
 
 /**
  * tests the database service
@@ -41,8 +42,10 @@ class CacheServiceTest extends BaseTestService
      */
     public function testGetById()
     {
+        $comic = SampleGenerator::getComicSample();
+        
         $databaseService = $this->getDatabaseService();
-        $comic = $this->insertTestComic($databaseService);
+        $databaseService->saveToDatabase($comic);
 
         $res = $databaseService->getSingleByIdFromDatabase(new Comic(), $comic->id);
         static::assertNotNull($res);

@@ -53,10 +53,10 @@ class PublicControllerTest extends FrontendTestController
      */
     public function testInfoNode()
     {
-        $this->getTestHelper()->mockRequest("comics");
+        $this->getTestHelper()->mockRequest("comics/");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("no comics", $responseStr);
+        static::assertContains("your cached comics", $responseStr);
     }
 
     /**

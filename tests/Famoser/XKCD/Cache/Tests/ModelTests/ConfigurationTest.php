@@ -22,12 +22,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testTableNamesUnique()
     {
         $testHelper = new ApiTestHelper();
-        $classes = $testHelper->getClassInstancesInNamespace($this, "Famoser\\SyncApi\\Models\\Entities");
+        $classes = $testHelper->getClassInstancesInNamespace($this, "Famoser\\XKCD\\Cache\\Entities");
 
         $tableNames = [];
         /* @var BaseEntity[] $classes */
         foreach ($classes as $class) {
-            static::assertArrayNotHasKey($class->getTableName(), $tableNames);
+            static::assertArrayNotHasKey($class->getTableName(), $tableNames, "already used " . $class->getTableName());
             $tableNames[$class->getTableName()] = true;
         }
     }

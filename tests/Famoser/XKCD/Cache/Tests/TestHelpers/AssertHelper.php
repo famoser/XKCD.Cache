@@ -90,7 +90,6 @@ class AssertHelper
         //no error in json response
         $responseString = static::getResponseString($response);
         $testingUnit->assertNotContains("exception", $responseString);
-        $testingUnit->assertNotContains("error", $responseString);
 
         return $responseString;
     }

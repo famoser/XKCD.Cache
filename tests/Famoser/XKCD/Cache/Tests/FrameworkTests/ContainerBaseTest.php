@@ -10,8 +10,12 @@ namespace Famoser\XKCD\Cache\Tests\FrameworkTests;
 
 
 use Famoser\XKCD\Cache\Framework\ContainerBase;
+use Famoser\XKCD\Cache\Services\Interfaces\CacheServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
+use Famoser\XKCD\Cache\Services\Interfaces\SettingServiceInterface;
+use Famoser\XKCD\Cache\Services\Interfaces\XKCDServiceInterface;
+use Famoser\XKCD\Cache\Services\SettingService;
 use Famoser\XKCD\Cache\Tests\TestHelpers\ApiTestHelper;
 use Slim\Interfaces\RouterInterface;
 use Slim\Views\Twig;
@@ -31,11 +35,13 @@ class ContainerBaseTest extends \PHPUnit_Framework_TestCase
         static::assertInstanceOf(RouterInterface::class, $container->getRouter());
         static::assertInstanceOf(DatabaseServiceInterface::class, $container->getDatabaseService());
         static::assertInstanceOf(LoggingServiceInterface::class, $container->getLoggingService());
-        static::assertTrue(count($container->getSettingsArray()) > 0);
+        static::assertInstanceOf(CacheServiceInterface::class, $container->getCacheService());
+        static::assertInstanceOf(SettingServiceInterface::class, $container->getSettingService());
+        static::assertInstanceOf(XKCDServiceInterface::class, $container->getXKCDService());
         static::assertInstanceOf(Twig::class, $container->getView());
 
         //6 methods tested + __construct
-        $expectedMethodCount = 9;
+        $expectedMethodCount = 8;
         $actualMethodCount = count(get_class_methods(ContainerBase::class));
         static::assertTrue(
             $actualMethodCount == $expectedMethodCount,

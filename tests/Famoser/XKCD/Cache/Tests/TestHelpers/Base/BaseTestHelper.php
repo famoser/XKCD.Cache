@@ -10,6 +10,7 @@ namespace Famoser\XKCD\Cache\Tests\TestHelpers\Base;
 
 
 use Famoser\XKCD\Cache\Framework\ContainerBase;
+use Famoser\XKCD\Cache\Services\SettingService;
 use Famoser\XKCD\Cache\XKCDCacheApp;
 use Famoser\XKCD\Cache\Tests\TestHelpers\TestApp\TestXKCDCacheApp;
 
@@ -31,7 +32,7 @@ abstract class BaseTestHelper extends ContainerBase
     public function __construct()
     {
         //create config array
-        $this->config = $this->constructConfig();
+        $this->config = [SettingService::getSettingKey() => $this->constructConfig()];
 
         //create test app
         $this->testApp = new TestXKCDCacheApp($this->config);
@@ -72,24 +73,9 @@ abstract class BaseTestHelper extends ContainerBase
     {
         $ds = DIRECTORY_SEPARATOR;
         $oneUp = ".." . $ds;
-        $basePath = realpath(__DIR__ . "/" . $oneUp . $oneUp . $oneUp . $oneUp . $oneUp . $oneUp) . $ds;
-        $config =
-            [
-                'displayErrorDetails' => true,
-                'debug_mode' => true,
-                'api_modulo' => 10000019,
-                'db_path' => $basePath . "app" . $ds . "data" . $ds . "data_test_" . uniqid() . ".sqlite",
-                'db_template_path' => $basePath . "app" . $ds . "data_templates" . $ds . "data_test_template.sqlite",
-                'file_path' => $basePath . "app" . $ds . "files",
-                'cache_path' => $basePath . "app" . $ds . "cache",
-                'log_file_path' => $basePath . "app" . $ds . "logs" . $ds . "log.log",
-                'template_path' => $basePath . "app" . $ds . "templates",
-                'public_path' => $basePath . "src" . $ds . "public",
-                'src_path' => $basePath . "src",
-                'mail' => ['type' => 'mock']
-            ];
+        $basePath = realpath(__DIR__ . "/" . $oneUp . $oneUp . $oneUp . $oneUp . $oneUp . $oneUp . $oneUp) . $ds;
 
-        return $config;
+        return SettingService::generateRecommendedSettings($basePath, true, true);
     }
 
     /**
@@ -102,7 +88,7 @@ abstract class BaseTestHelper extends ContainerBase
     public function getClassInstancesInNamespace(\PHPUnit_Framework_TestCase $testCase, $nameSpace)
     {
         $containerBase = new ContainerBase($this->getTestApp()->getContainer());
-        $srcPath = $containerBase->getSettingsArray()["src_path"];
+        $srcPath = $containerBase->getSettingService()->getSrcPath();
         $filePath = str_replace("\\", DIRECTORY_SEPARATOR, $nameSpace);
         $res = [];
         foreach (glob($srcPath . DIRECTORY_SEPARATOR . $filePath . DIRECTORY_SEPARATOR . "*.php") as $filename) {
@@ -133,9 +119,12 @@ abstract class BaseTestHelper extends ContainerBase
     public function cleanEnvironment()
     {
         $this->getDatabaseService()->dispose();
+
+        $baseContainer = new ContainerBase($this->testApp->getContainer());
+        $dbPath = $baseContainer->getSettingService()->getDbPath();
         //delete db if exists
-        if (is_file($this->config ["db_path"])) {
-            unlink($this->config ["db_path"]);
+        if (is_file($dbPath)) {
+            unlink($dbPath);
         }
     }
 

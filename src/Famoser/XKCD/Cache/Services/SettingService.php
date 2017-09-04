@@ -27,30 +27,36 @@ class SettingService extends BaseService implements SettingServiceInterface
     /**
      * @param string $basePath
      * @param boolean $debugMode
+     * @param bool $testMode if set to true the database filename will be random
      * @return string[]
      */
-    public static function generateRecommendedSettings($basePath, $debugMode)
+    public static function generateRecommendedSettings($basePath, $debugMode, $testMode)
     {
         $ds = DIRECTORY_SEPARATOR;
 
         $appBasePath = $basePath . "app" . $ds;
         $publicBasePath = $basePath . "src" . $ds . "public";
 
+        if ($testMode) {
+            $dbConfig = ['db_path' => $appBasePath . "data" . $ds . "data" . uniqid() . ".db"];
+        } else {
+            $dbConfig = ['db_path' => $appBasePath . "data" . $ds . "data.db"];
+        }
         return [
-            'displayErrorDetails' => $debugMode,
-            'debug_mode' => $debugMode,
-            'db_path' => $appBasePath . "data" . $ds . "data.db",
-            'db_template_path' => $appBasePath . "data_templates" . $ds . "data_template.db",
-            'file_path' => $appBasePath . "files",
-            'cache_path' => $appBasePath . "cache",
-            'log_file_path' => $appBasePath . "logs" . $ds . "log.log",
-            'template_path' => $appBasePath . "templates",
-            'public_path' => $publicBasePath,
-            'image_cache_path' => $publicBasePath . $ds . "images" . $ds . "xkcd",
-            'image_public_base_path' => "/images/xkcd",
-            'zip_cache_path' => $publicBasePath . $ds . "zip",
-            'max_refresh_images' => 10
-        ];
+                'displayErrorDetails' => $debugMode,
+                'debug_mode' => $debugMode,
+                'db_template_path' => $appBasePath . "data_templates" . $ds . "data_template.db",
+                'file_path' => $appBasePath . "files",
+                'cache_path' => $appBasePath . "cache",
+                'src_path' => $basePath . "src",
+                'log_file_path' => $appBasePath . "logs" . $ds . "log.log",
+                'template_path' => $appBasePath . "templates",
+                'public_path' => $publicBasePath,
+                'image_cache_path' => $publicBasePath . $ds . "images" . $ds . "xkcd",
+                'image_public_base_path' => "/images/xkcd",
+                'zip_cache_path' => $publicBasePath . $ds . "zip",
+                'max_refresh_images' => 10
+            ] + $dbConfig;
     }
 
     /**
@@ -183,5 +189,15 @@ class SettingService extends BaseService implements SettingServiceInterface
     public function getMaxRefreshImages()
     {
         return $this->getSettingArray()["max_refresh_images"];
+    }
+
+    /**
+     * get the path which is the root of the PSR namespace
+     *
+     * @return string
+     */
+    public function getSrcPath()
+    {
+        return $this->getSettingArray()["src_path"];
     }
 }
