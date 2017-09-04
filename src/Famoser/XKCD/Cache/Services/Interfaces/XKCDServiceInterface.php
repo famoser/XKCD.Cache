@@ -10,7 +10,7 @@ namespace Famoser\XKCD\Cache\Services\Interfaces;
 
 
 use Famoser\XKCD\Cache\Exceptions\ServerException;
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Models\XKCD\XKCDJson;
 
 interface XKCDServiceInterface
 {

@@ -38,8 +38,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Famoser\\SyncApi\\": "src/Famoser/SyncApi/",
-      "Famoser\\SyncApi\\Tests\\": "tests/Famoser/SyncApi/Tests"
+      "Famoser\\XKCD\\Cache\\": "src/Famoser/XKCD/Cache/",
+      "Famoser\\XKCD\\Cache\\\\Tests\\": "tests/Famoser/XKCD/Cache/Tests"
     }
   }
 }

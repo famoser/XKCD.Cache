@@ -6,10 +6,10 @@
  * Time: 19:20
  */
 
-namespace Famoser\XKCD\Cache\Models\Communication\Response;
+namespace Famoser\XKCD\Cache\Models\Response;
 
 
-use Famoser\XKCD\Cache\Models\Communication\Response\Base\BaseResponse;
+use Famoser\XKCD\Cache\Models\Response\Base\BaseResponse;
 
 /**
  * the response to an AuthorizationRequest

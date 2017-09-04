@@ -9,11 +9,8 @@
 namespace Famoser\XKCD\Cache\Controllers\Base;
 
 
-use Famoser\XKCD\Cache\Exceptions\ServerException;
 use Famoser\XKCD\Cache\Framework\ContainerBase;
-use Famoser\XKCD\Cache\Models\Communication\Response\Base\BaseResponse;
-use Famoser\XKCD\Cache\Entities\Comic;
-use Famoser\XKCD\Cache\Types\ServerError;
+use Famoser\XKCD\Cache\Models\Response\Base\BaseResponse;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

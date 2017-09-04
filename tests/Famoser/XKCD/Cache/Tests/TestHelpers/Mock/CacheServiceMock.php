@@ -6,7 +6,7 @@
  * Time: 14:01
  */
 
-namespace Famoser\XKCD\Cache\Tests\MockServices;
+namespace Famoser\XKCD\Cache\Tests\TestHelpers\Mock;
 
 
 use Famoser\XKCD\Cache\Entities\Comic;
@@ -14,9 +14,13 @@ use Famoser\XKCD\Cache\Exceptions\ServerException;
 use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
 use Famoser\XKCD\Cache\Services\Base\BaseService;
 use Famoser\XKCD\Cache\Services\Interfaces\CacheServiceInterface;
+use Famoser\XKCD\Cache\Tests\TestHelpers\SampleGenerator;
 
 class CacheServiceMock extends BaseService implements CacheServiceInterface
 {
+    /* @var Comic[] $cache : key is number of comic, value is Comic */
+    private $cache = [];
+
     /**
      * creates a zip file of all the images contained in the image folder with the target number as filename
      *
@@ -26,7 +30,7 @@ class CacheServiceMock extends BaseService implements CacheServiceInterface
      */
     public function createImageZip($number)
     {
-
+        return true;
     }
 
     /**
@@ -37,7 +41,12 @@ class CacheServiceMock extends BaseService implements CacheServiceInterface
      */
     public function getNewestComic()
     {
-        // TODO: Implement getNewestComic() method.
+        if (count($this->cache) == 0) {
+            return null;
+        }
+
+        $maxKey = max(array_keys($this->cache));
+        return $this->cache[$maxKey];
     }
 
     /**
@@ -49,6 +58,7 @@ class CacheServiceMock extends BaseService implements CacheServiceInterface
      */
     public function persistComic($XKCDComic)
     {
-        // TODO: Implement persistComic() method.
+        $this->cache[$XKCDComic->num] = $XKCDComic;
+        return true;
     }
 }

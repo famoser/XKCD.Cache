@@ -10,9 +10,8 @@ namespace Famoser\XKCD\Cache\Services;
 
 
 use Famoser\XKCD\Cache\Exceptions\ServerException;
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Models\XKCD\XKCDJson;
 use Famoser\XKCD\Cache\Services\Base\BaseService;
-use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\XKCDServiceInterface;
 use Famoser\XKCD\Cache\Types\ServerError;
 

@@ -21,8 +21,12 @@ src/public/dist/css/pre/
 src/public/dist/fonts/pre/
 src/public/dist/js/pre/
 
-#excluding deployment files
+#excluding image cache
+src/public/images/xkcd/*
+
+#excluding deployment/dev files
 servers.yml
+src/public/.dev
 
 #excluding test data
 build/logs/clover.xml

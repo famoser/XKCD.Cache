@@ -6,7 +6,7 @@
  * Time: 19:18
  */
 
-namespace Famoser\XKCD\Cache\Models\Communication\Response\Base;
+namespace Famoser\XKCD\Cache\Models\Response\Base;
 
 
 /**

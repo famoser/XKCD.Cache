@@ -11,7 +11,7 @@ namespace Famoser\XKCD\Cache\Services;
 
 use Famoser\XKCD\Cache\Entities\Comic;
 use Famoser\XKCD\Cache\Exceptions\ServerException;
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Models\XKCD\XKCDJson;
 use Famoser\XKCD\Cache\Services\Base\BaseService;
 use Famoser\XKCD\Cache\Services\Interfaces\CacheServiceInterface;
 use Famoser\XKCD\Cache\Types\Downloader;
@@ -37,7 +37,12 @@ class CacheService extends BaseService implements CacheServiceInterface
                 $this->getLoggingService()->log("could not create zip file at " . $filename);
             }
 
-            $zip->addGlob($this->getSettingService()->getImageCachePath() . DIRECTORY_SEPARATOR . "*");
+            $files = glob($this->getSettingService()->getImageCachePath() . DIRECTORY_SEPARATOR . "*");
+            //todo: test
+            var_dump($files);
+            for ($i = 1; $i < $files; $i++) {
+                //add to archive if number smaller/equal than the number specified above
+            }
             $this->getLoggingService()->log("created zip file with " . $zip->numFiles . " files. status: " . $zip->status);
             $zip->close();
             return true;
@@ -82,19 +87,67 @@ class CacheService extends BaseService implements CacheServiceInterface
         $comic->publish_date = strtotime($XKCDComic->day . "." . $XKCDComic->month . "." . $XKCDComic->year);
         $comic->download_date_time = time();
         $comic->downloaded_by = Downloader::VERSION_1;
-        $comic->json = $XKCDComic;
+        $comic->json = json_encode($XKCDComic);
         $comic->filename = substr($comic->img, strrpos($comic->img, "/") + 1);
 
         try {
             //download image
             $contents = file_get_contents($comic->img);
-            file_put_contents($this->getSettingsArray()["image_cache_path"] . DIRECTORY_SEPARATOR . $comic->filename, $contents);
+            file_put_contents($this->getSettingService()->getImageCachePath() . DIRECTORY_SEPARATOR . $comic->filename, $contents);
         } catch (\Exception $ex) {
             $comic->status = DownloadStatus::IMAGE_DOWNLOAD_FAILED;
             $this->getLoggingService()->log("could not download comic " . $XKCDComic->num . ": " . $ex);
         }
 
         return $dbService->saveToDatabase($comic);
+    }
 
+    private function constructZipPath($number)
+    {
+        return $this->getSettingService()->getZipCachePath() . DIRECTORY_SEPARATOR . $number . ".zip";
+    }
+
+    /**
+     * returns the file size of the zip with the specified number
+     *
+     * @param $number
+     * @return int
+     */
+    public function getFileSizeOfZip($number)
+    {
+        $zipPath = $this->constructZipPath($number);
+        return filesize($zipPath);
+    }
+
+    /**
+     * returns the content of the zip with the specified number
+     *
+     * @param $number
+     * @return mixed
+     */
+    public function getContentOfZip($number)
+    {
+        $zipPath = $this->constructZipPath($number);
+        return file_get_contents($zipPath);
+    }
+
+    /**
+     * returns the number of the newest zip
+     * returns false if none found
+     *
+     * @return int|false
+     */
+    public function getNewestZip()
+    {
+        $newestComic = $this->getNewestComic();
+        $currentNum = $newestComic->num;
+        do {
+            $zipPath = $this->constructZipPath($currentNum);
+            $zipExists = file_exists($zipPath);
+        } while (!$zipExists && $currentNum-- > 0);
+        if ($zipExists) {
+            return $currentNum;
+        }
+        return false;
     }
 }

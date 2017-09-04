@@ -9,13 +9,11 @@
 namespace Famoser\XKCD\Cache\Framework;
 
 
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
 use Famoser\XKCD\Cache\Services\Interfaces\CacheServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\SettingServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\XKCDServiceInterface;
-use Famoser\XKCD\Cache\XKCDCacheApp;
 use Interop\Container\ContainerInterface;
 use Slim\Interfaces\RouterInterface;
 

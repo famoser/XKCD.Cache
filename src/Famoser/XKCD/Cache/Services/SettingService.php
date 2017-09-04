@@ -20,6 +20,7 @@ class SettingService extends BaseService implements SettingServiceInterface
 
     public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         parent::__construct($container);
     }
 
@@ -38,8 +39,8 @@ class SettingService extends BaseService implements SettingServiceInterface
         return [
             'displayErrorDetails' => $debugMode,
             'debug_mode' => $debugMode,
-            'db_path' => $appBasePath . "data" . $ds . "data.sqlite",
-            'db_template_path' => $appBasePath . "data_templates" . $ds . "data_template.sqlite",
+            'db_path' => $appBasePath . "data" . $ds . "data.db",
+            'db_template_path' => $appBasePath . "data_templates" . $ds . "data_template.db",
             'file_path' => $appBasePath . "files",
             'cache_path' => $appBasePath . "cache",
             'log_file_path' => $appBasePath . "logs" . $ds . "log.log",

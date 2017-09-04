@@ -9,8 +9,8 @@
 namespace Famoser\XKCD\Cache\Controllers;
 
 use Famoser\XKCD\Cache\Controllers\Base\BaseController;
-use Famoser\XKCD\Cache\Exceptions\ServerException;
 use Famoser\XKCD\Cache\Entities\Comic;
+use Famoser\XKCD\Cache\Exceptions\ServerException;
 use Famoser\XKCD\Cache\Types\ServerError;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -38,18 +38,14 @@ class DownloadController extends BaseController
             throw new ServerException(ServerError::CACHE_EMPTY);
         }
 
-        $zipCachePath = $this->getSettingService()->getZipCachePath() . DIRECTORY_SEPARATOR;
-        $currentNum = $newestComic->num;
-        do {
-            $zipPath = $zipCachePath . $currentNum . ".zip";
-            $zipExists = file_exists($zipPath);
-        } while (!$zipExists && $currentNum-- > 0);
-
-        if ($zipExists) {
-            return $this->returnRawFile($response, "application/zip", "xkcd_comics.zip", filesize($zipPath), file_get_contents($zipPath));
+        $newestZip = $this->getCacheService()->getNewestZip();
+        if ($newestZip === false) {
+            throw new ServerException(ServerError::ZIP_NOT_FOUND);
         }
 
-        throw new ServerException(ServerError::ZIP_NOT_FOUND);
+        $fileSize = $this->getCacheService()->getFileSizeOfZip($newestZip);
+        $fileContent = $this->getCacheService()->getContentOfZip($newestZip);
+        return $this->returnRawFile($response, "application/zip", "xkcd_comics_" . $newestZip . ".zip", $fileSize, $fileContent);
     }
 
     /**

@@ -11,7 +11,7 @@ namespace Famoser\XKCD\Cache\Services\Interfaces;
 
 use Famoser\XKCD\Cache\Entities\Comic;
 use Famoser\XKCD\Cache\Exceptions\ServerException;
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Models\XKCD\XKCDJson;
 
 interface CacheServiceInterface
 {
@@ -23,6 +23,30 @@ interface CacheServiceInterface
      * @throws ServerException
      */
     public function createImageZip($number);
+
+    /**
+     * returns the file size of the zip with the specified number
+     *
+     * @param $number
+     * @return int
+     */
+    public function getFileSizeOfZip($number);
+
+    /**
+     * returns the content of the zip with the specified number
+     *
+     * @param $number
+     * @return mixed
+     */
+    public function getContentOfZip($number);
+
+    /**
+     * returns the number of the newest zip
+     * returns false if none found
+     *
+     * @return int|false
+     */
+    public function getNewestZip();
 
     /**
      * returns the newest XKCD comic

@@ -17,7 +17,7 @@ $ds = DIRECTORY_SEPARATOR;
 $oneUp = ".." . $ds;
 $basePath = realpath(__DIR__ . "/" . $oneUp . $oneUp) . $ds;
 
-$debugMode = file_exists(".debug");
+$debugMode = file_exists(".dev");
 
 require '..' . $ds . '..' . $ds . 'vendor' . $ds . 'autoload.php';
 

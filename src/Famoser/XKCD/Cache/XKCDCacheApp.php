@@ -11,11 +11,11 @@ namespace Famoser\XKCD\Cache;
 
 use Famoser\XKCD\Cache\Controllers\ApiController;
 use Famoser\XKCD\Cache\Controllers\ComicController;
+use Famoser\XKCD\Cache\Controllers\DownloadController;
 use Famoser\XKCD\Cache\Controllers\PublicController;
 use Famoser\XKCD\Cache\Exceptions\ServerException;
 use Famoser\XKCD\Cache\Framework\ContainerBase;
-use Famoser\XKCD\Cache\Models\Communication\Response\Base\BaseResponse;
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Models\Response\Base\BaseResponse;
 use Famoser\XKCD\Cache\Services\CacheService;
 use Famoser\XKCD\Cache\Services\DatabaseService;
 use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
@@ -83,12 +83,12 @@ class XKCDCacheApp extends App
             $this->get('/', PublicController::class . ':index')->setName('index');
 
             $this->group(
-                '/comic',
+                '/comics',
                 function () {
-                    $this->get('/', ComicController::class . ':index')->setName('comic_index');
+                    $this->get('/', ComicController::class . ':index')->setName('comics_index');
+                    $this->get('/failed', ComicController::class . ':failed')->setName('comics_failed');
 
-                    $this->get('/show/{id}', ComicController::class . ':show')->setName('comic_show');
-
+                    $this->get('/show/{id}', ComicController::class . ':show')->setName('comics_show');
                     $this->get('/refresh/{id}', ComicController::class . ':refresh')->setName('comic_new');
                 }
             );
@@ -103,17 +103,14 @@ class XKCDCacheApp extends App
     private function getApiRoutes()
     {
         return function () {
-            $this->get('/refresh', ApiController::class . ':index')->setName('api_refresh');
-            $this->get('/status', ApiController::class . ':index')->setName('api_status');
+            $this->get('/refresh', ApiController::class . ':refresh')->setName('api_refresh');
+            $this->get('/status', ApiController::class . ':status')->setName('api_status');
 
             $this->group(
-                '/comic',
+                '/download',
                 function () {
-                    $this->get('/', ComicController::class . ':index')->setName('comic_index');
-
-                    $this->get('/show/{id}', ComicController::class . ':show')->setName('comic_show');
-
-                    $this->get('/refresh/{id}', ComicController::class . ':refresh')->setName('comic_new');
+                    $this->get('/zip', DownloadController::class . ':downloadZip')->setName('download_zip');
+                    $this->get('/json', DownloadController::class . ':downloadJson')->setName('download_json');
                 }
             );
         };
@@ -129,13 +126,15 @@ class XKCDCacheApp extends App
     {
         $container = new Container($configuration);
 
-        //add handlers & services
-        $this->addHandlers($container);
+        //add services
         $this->addServices($container);
 
         //construct base container to get services now needed to configure other services
         $baseContainer = new ContainerBase($container);
         $settings = $baseContainer->getSettingService();
+
+        //add error handlers
+        $this->addHandlers($container, $baseContainer);
 
         //add view
         $container['view'] = function (Container $container) use ($settings) {

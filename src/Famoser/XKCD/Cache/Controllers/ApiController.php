@@ -10,17 +10,14 @@ namespace Famoser\XKCD\Cache\Controllers;
 
 
 use Famoser\XKCD\Cache\Controllers\Base\BaseController;
-use Famoser\XKCD\Cache\Exceptions\ServerException;
-use Famoser\XKCD\Cache\Models\Communication\Response\RefreshResponse;
-use Famoser\XKCD\Cache\Models\Communication\Response\StatusResponse;
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
 use Famoser\XKCD\Cache\Entities\Comic;
-use Famoser\XKCD\Cache\Types\Downloader;
+use Famoser\XKCD\Cache\Exceptions\ServerException;
+use Famoser\XKCD\Cache\Models\Response\RefreshResponse;
+use Famoser\XKCD\Cache\Models\Response\StatusResponse;
+use Famoser\XKCD\Cache\Models\XKCD\XKCDJson;
 use Famoser\XKCD\Cache\Types\DownloadStatus;
-use Famoser\XKCD\Cache\Types\ServerError;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use ZipArchive;
 
 /**
  * the api controller provides the two public api methods
@@ -47,6 +44,17 @@ class ApiController extends BaseController
         return false;
     }
 
+    private function getNewestCacheNumber()
+    {
+        $newestCache = $this->getCacheService()->getNewestComic();
+        if ($newestCache instanceof Comic) {
+            $newestCachedComic = $newestCache->num;
+        } else {
+            $newestCachedComic = 0;
+        }
+        return $newestCachedComic;
+    }
+
     /**
      * show basic info about this application
      *
@@ -57,16 +65,19 @@ class ApiController extends BaseController
      */
     public function refresh(Request $request, Response $response, $args)
     {
-        $newestCache = $this->getCacheService()->getNewestComic();
         $newestOnline = $this->getXKCDService()->getNewestComic();
+        $newestCachedNumber = $this->getNewestCacheNumber();
 
-        $refreshResponse = new RefreshResponse();
-        for ($i = $newestCache->num; $i < $newestOnline->num; $i++) {
-            $this->cacheComic($i);
-        }
-        if ($newestCache->num < $newestOnline->num) {
+        if ($newestCachedNumber < $newestOnline->num) {
+            $maxIterations = 10;
+            for ($i = $newestCachedNumber + 1; $i < $newestOnline->num && $maxIterations > 0; $i++) {
+                $maxIterations--;
+                $this->cacheComic($i);
+            }
             $this->getCacheService()->createImageZip($newestOnline->num);
         }
+
+        $refreshResponse = new RefreshResponse();
 
         $failed = $this->getDatabaseService()->getFromDatabase(new Comic(), "status <> :status", ["status" => DownloadStatus::SUCCESSFUL]);
         foreach ($failed as $item) {
@@ -91,14 +102,14 @@ class ApiController extends BaseController
      */
     public function status(Request $request, Response $response, $args)
     {
-        $newestCache = $this->getCacheService()->getNewestComic();
+        $newestCachedNumber = $this->getNewestCacheNumber();
         $newestOnline = $this->getXKCDService()->getNewestComic();
 
         $apiInfo = new StatusResponse();
         $apiInfo->api_version = 1;
-        $apiInfo->latest_image_cached = $newestCache->num;
+        $apiInfo->latest_image_cached = $newestCachedNumber;
         $apiInfo->latest_image_published = $newestOnline->num;
-        $apiInfo->hot = $newestCache->num == $newestOnline->num;
+        $apiInfo->hot = $newestCachedNumber == $newestOnline->num;
 
         return $this->returnJson($response, $apiInfo);
     }
