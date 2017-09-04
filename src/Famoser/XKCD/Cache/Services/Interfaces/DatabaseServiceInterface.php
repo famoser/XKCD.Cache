@@ -9,8 +9,8 @@
 namespace Famoser\XKCD\Cache\Services\Interfaces;
 
 
-use Famoser\XKCD\Cache\Models\Entities\Base\BaseEntity;
-use Famoser\XKCD\Cache\Models\Entities\Comic;
+use Famoser\XKCD\Cache\Entities\Base\BaseEntity;
+use Famoser\XKCD\Cache\Entities\Comic;
 
 /**
  * Interface DatabaseServiceInterface

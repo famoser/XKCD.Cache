@@ -9,9 +9,9 @@
 namespace Famoser\XKCD\Cache\Tests\TestHelpers;
 
 
-use Famoser\XKCD\Cache\Models\Entities\Application;
-use Famoser\XKCD\Cache\Models\Entities\Comic;
-use Famoser\XKCD\Cache\Models\Entities\FrontendUser;
+use Famoser\XKCD\Cache\Entities\Application;
+use Famoser\XKCD\Cache\Entities\Comic;
+use Famoser\XKCD\Cache\Entities\FrontendUser;
 use Famoser\XKCD\Cache\Services\SessionService;
 use Famoser\XKCD\Cache\Tests\TestHelpers\Base\BaseTestHelper;
 use Slim\Http\Environment;

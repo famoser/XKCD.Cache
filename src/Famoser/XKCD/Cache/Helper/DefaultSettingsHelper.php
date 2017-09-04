@@ -29,6 +29,7 @@ class DefaultSettingsHelper
             'template_path' => $appBasePath . "templates",
             'public_path' => $publicBasePath,
             'image_cache_path' => $publicBasePath . $ds . "images" . $ds . "xkcd",
+            'image_public_base_path' => "/images/xkcd",
             'zip_cache_path' => $publicBasePath . $ds . "zip"
         ];
     }

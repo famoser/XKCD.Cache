@@ -9,7 +9,7 @@
 namespace Famoser\XKCD\Cache\Tests\ModelTests;
 
 
-use Famoser\XKCD\Cache\Models\Entities\Base\BaseEntity;
+use Famoser\XKCD\Cache\Entities\Base\BaseEntity;
 use Famoser\XKCD\Cache\Tests\TestHelpers\ApiTestHelper;
 
 /**

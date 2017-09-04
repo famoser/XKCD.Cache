@@ -14,7 +14,7 @@ use Famoser\XKCD\Cache\Exceptions\ServerException;
 use Famoser\XKCD\Cache\Models\Communication\Response\RefreshResponse;
 use Famoser\XKCD\Cache\Models\Communication\Response\StatusResponse;
 use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
-use Famoser\XKCD\Cache\Models\Entities\Comic;
+use Famoser\XKCD\Cache\Entities\Comic;
 use Famoser\XKCD\Cache\Types\Downloader;
 use Famoser\XKCD\Cache\Types\DownloadStatus;
 use Famoser\XKCD\Cache\Types\ServerError;
@@ -23,7 +23,7 @@ use Slim\Http\Response;
 use ZipArchive;
 
 /**
- * the public controller displays the index page & other pages accessible to everyone
+ * the api controller provides the two public api methods
  *
  * @package Famoser\XKCD\Cache\Controllers
  */

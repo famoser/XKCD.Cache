@@ -32,6 +32,10 @@ class DownloadStatus
         switch ($apiError) {
             case self::SUCCESSFUL:
                 return 'no error occurred';
+            case self::JSON_DOWNLOAD_FAILED:
+                return 'json download failed';
+            case self::IMAGE_DOWNLOAD_FAILED:
+                return 'image download failed';
             case self::UNKNOWN_ERROR:
                 return 'an unknown error occurred';
 

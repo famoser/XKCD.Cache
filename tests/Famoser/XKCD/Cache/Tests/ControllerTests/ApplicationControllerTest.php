@@ -10,11 +10,7 @@ namespace Famoser\XKCD\Cache\Tests\ControllerTests;
 
 
 use Famoser\XKCD\Cache\Framework\ContainerBase;
-use Famoser\XKCD\Cache\Models\Entities\Comic;
-use Famoser\XKCD\Cache\Models\Entities\FrontendUser;
-use Famoser\XKCD\Cache\Repositories\XKCDRepository;
-use Famoser\XKCD\Cache\Services\DatabaseService;
-use Famoser\XKCD\Cache\Services\SessionService;
+use Famoser\XKCD\Cache\Entities\Comic;
 use Famoser\XKCD\Cache\Tests\ControllerTests\Base\FrontendTestController;
 use Famoser\XKCD\Cache\Tests\TestHelpers\ApiTestHelper;
 use Famoser\XKCD\Cache\Tests\TestHelpers\AssertHelper;

@@ -1,0 +1,39 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}your comics{% endblock title %}
+
+{% block content %}
+    {% if comics | length == 0 %}
+        <p>The are no comics cached yet</p>
+    {% else %}
+        <h3>your cached comics</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>num</th>
+                <th>title</th>
+                <th>date</th>
+                <th>status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for comic in comics %}
+                <tr>
+                    <td>{{ comic.num }}</td>
+                    <td>{{ comic.safe_title }}</td>
+                    <td>{{ comic.publish_date|date("d.m.Y") }}</td>
+                    <td>{{ comic.status }}</td>
+                    <td>
+                        <a href="{{ path_for('comics_view', {'id': comic.id}) }}">view</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <p>
+        show <a href="{{ path_for("comics_index") }}">all</a> or
+        <a href="{{ path_for("comics_failed") }}">only failed</a>
+    </p>
+{% endblock content %}

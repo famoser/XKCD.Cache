@@ -10,12 +10,12 @@ namespace Famoser\XKCD\Cache\Tests\TestHelpers;
 
 
 use Famoser\XKCD\Cache\Models\Communication\Request\Base\BaseRequest;
-use Famoser\XKCD\Cache\Models\Entities\Comic;
-use Famoser\XKCD\Cache\Models\Entities\Collection;
-use Famoser\XKCD\Cache\Models\Entities\ContentVersion;
-use Famoser\XKCD\Cache\Models\Entities\Device;
-use Famoser\XKCD\Cache\Models\Entities\User;
-use Famoser\XKCD\Cache\Models\Entities\UserCollection;
+use Famoser\XKCD\Cache\Entities\Comic;
+use Famoser\XKCD\Cache\Entities\Collection;
+use Famoser\XKCD\Cache\Entities\ContentVersion;
+use Famoser\XKCD\Cache\Entities\Device;
+use Famoser\XKCD\Cache\Entities\User;
+use Famoser\XKCD\Cache\Entities\UserCollection;
 use Famoser\XKCD\Cache\Tests\TestHelpers\Base\BaseTestHelper;
 use Famoser\XKCD\Cache\Types\ContentType;
 use Slim\Http\Environment;

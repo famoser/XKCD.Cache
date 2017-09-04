@@ -10,7 +10,7 @@ namespace Famoser\XKCD\Cache\Tests\ControllerTests;
 
 
 use Famoser\XKCD\Cache\Framework\ContainerBase;
-use Famoser\XKCD\Cache\Models\Entities\FrontendUser;
+use Famoser\XKCD\Cache\Entities\FrontendUser;
 use Famoser\XKCD\Cache\Services\MailService;
 use Famoser\XKCD\Cache\Services\SessionService;
 use Famoser\XKCD\Cache\XKCDCacheApp;

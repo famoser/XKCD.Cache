@@ -13,7 +13,7 @@ use Famoser\XKCD\Cache\Framework\ContainerBase;
 use Famoser\XKCD\Cache\Models\Communication\Entities\CollectionCommunicationEntity;
 use Famoser\XKCD\Cache\Models\Communication\Entities\UserCommunicationEntity;
 use Famoser\XKCD\Cache\Models\Communication\Request\AuthorizationRequest;
-use Famoser\XKCD\Cache\Models\Entities\UserCollection;
+use Famoser\XKCD\Cache\Entities\UserCollection;
 use Famoser\XKCD\Cache\Tests\ControllerTests\Base\ApiTestController;
 use Famoser\XKCD\Cache\Tests\TestHelpers\AssertHelper;
 

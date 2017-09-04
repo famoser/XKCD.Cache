@@ -10,13 +10,13 @@ namespace Famoser\XKCD\Cache\Controllers;
 
 use Famoser\XKCD\Cache\Controllers\Base\BaseController;
 use Famoser\XKCD\Cache\Exceptions\ServerException;
-use Famoser\XKCD\Cache\Models\Entities\Comic;
+use Famoser\XKCD\Cache\Entities\Comic;
 use Famoser\XKCD\Cache\Types\ServerError;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
- * the public controller displays the index page & other pages accessible to everyone
+ * the download controller exposes the two downloadable files
  *
  * @package Famoser\XKCD\Cache\Controllers
  */

@@ -14,7 +14,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
- * the public controller displays the index page & other pages accessible to everyone
+ * the public controller displays the index page
  *
  * @package Famoser\XKCD\Cache\Controllers
  */

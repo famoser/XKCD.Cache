@@ -6,12 +6,12 @@
  * Time: 21:15
  */
 
-namespace Famoser\XKCD\Cache\Models\Entities\Base;
+namespace Famoser\XKCD\Cache\Entities\Base;
 
 
 /**
  * the base database entry, has an id, and allows for the overriding class to specify a table name
- * @package Famoser\XKCD\Cache\Models\Entities\Base
+ * @package Famoser\XKCD\Cache\Entities\Base
  */
 abstract class BaseEntity
 {

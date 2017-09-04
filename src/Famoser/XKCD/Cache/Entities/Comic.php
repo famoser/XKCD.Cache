@@ -6,7 +6,7 @@
  * Time: 16:49
  */
 
-namespace Famoser\XKCD\Cache\Models\Entities;
+namespace Famoser\XKCD\Cache\Entities;
 
 /*
 CREATE TABLE 'applications' (
@@ -20,11 +20,13 @@ CREATE TABLE 'applications' (
 );
 */
 
-use Famoser\XKCD\Cache\Models\Entities\Base\BaseEntity;
+use Famoser\XKCD\Cache\Entities\Base\BaseEntity;
+use Famoser\XKCD\Cache\Types\Downloader;
+use Famoser\XKCD\Cache\Types\DownloadStatus;
 
 /**
  * represents a comic from XKCD
- * @package Famoser\XKCD\Cache\Models\Entities
+ * @package Famoser\XKCD\Cache\Entities
  */
 class Comic extends BaseEntity
 {
@@ -40,7 +42,7 @@ class Comic extends BaseEntity
     /* @var int $download_date_time type_of:timestamp */
     public $download_date_time;
 
-    /* @var string $filename*/
+    /* @var string $filename */
     public $filename;
 
     /* @var int $publish_date type_of:timestamp */
@@ -72,6 +74,26 @@ class Comic extends BaseEntity
 
     /* @var string $json */
     public $json;
+
+    /**
+     * converts the status to text
+     *
+     * @return string
+     */
+    public function getStatusAsText()
+    {
+        return DownloadStatus::toString($this->status);
+    }
+
+    /**
+     * display the name of the downloader
+     *
+     * @return string
+     */
+    public function getDownloadedByAsText()
+    {
+        return Downloader::toString($this->downloaded_by);
+    }
 
     /**
      * get the name of the table from the database

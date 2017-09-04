@@ -26,7 +26,7 @@ class PublicControllerTest extends FrontendTestController
     {
         $links = [
             "",
-            "info"
+            "comics/"
         ];
 
         foreach ($links as $link) {
