@@ -6,15 +6,15 @@
  * Time: 20:04
  */
 
-namespace Famoser\SyncApi\Services\Base;
+namespace Famoser\XKCD\Cache\Services\Base;
 
 
-use Famoser\SyncApi\Framework\ContainerBase;
+use Famoser\XKCD\Cache\Framework\ContainerBase;
 
 /**
  * Class BaseService: to be extended by all services
  *
- * @package Famoser\SyncApi\Services\Base
+ * @package Famoser\XKCD\Cache\Services\Base
  */
 class BaseService extends ContainerBase
 {

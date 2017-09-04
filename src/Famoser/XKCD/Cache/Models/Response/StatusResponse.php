@@ -6,20 +6,17 @@
  * Time: 19:20
  */
 
-namespace Famoser\SyncApi\Models\Communication\Response;
+namespace Famoser\XKCD\Cache\Models\Communication\Response;
 
-
-use Famoser\SyncApi\Models\Communication\Entities\DeviceCommunicationEntity;
-use Famoser\SyncApi\Models\Communication\Entities\UserCommunicationEntity;
-use Famoser\SyncApi\Models\Communication\Response\Base\BaseResponse;
+use Famoser\XKCD\Cache\Models\Communication\Response\Base\BaseResponse;
 
 /**
  * the response to an AuthorizationRequest
- * @package Famoser\SyncApi\Models\Communication\Response
+ * @package Famoser\XKCD\Cache\Models\Communication\Response
  */
 class StatusResponse extends BaseResponse
 {
-    /* @var bool $hot: returns true if all imagess with numbers smaller and equal to the latest published on XKCD are in the cache */
+    /* @var bool $hot: returns true if all images with numbers smaller and equal to the latest published on XKCD are in the cache */
     public $hot = true;
 
     /* @var int $latest_image_published: returns the latest image published on XKCD */

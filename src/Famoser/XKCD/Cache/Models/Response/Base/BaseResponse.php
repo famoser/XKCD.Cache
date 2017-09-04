@@ -6,14 +6,12 @@
  * Time: 19:18
  */
 
-namespace Famoser\SyncApi\Models\Communication\Response\Base;
+namespace Famoser\XKCD\Cache\Models\Communication\Response\Base;
 
-
-use Famoser\SyncApi\Types\DownloadStatus;
 
 /**
  * some properties which every response contains
- * @package Famoser\SyncApi\Models\Communication\Response\Base
+ * @package Famoser\XKCD\Cache\Models\Communication\Response\Base
  */
 class BaseResponse
 {

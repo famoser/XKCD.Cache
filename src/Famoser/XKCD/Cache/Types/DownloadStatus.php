@@ -6,16 +6,18 @@
  * Time: 13:23
  */
 
-namespace Famoser\SyncApi\Types;
+namespace Famoser\XKCD\Cache\Types;
 
 /**
  * any error which occurs by processing an api request
  *
- * @package Famoser\SyncApi\Types
+ * @package Famoser\XKCD\Cache\Types
  */
 class DownloadStatus
 {
     const SUCCESSFUL = 0;
+    const JSON_DOWNLOAD_FAILED = 1;
+    const IMAGE_DOWNLOAD_FAILED = 2;
 
     const UNKNOWN_ERROR = 1000;
 

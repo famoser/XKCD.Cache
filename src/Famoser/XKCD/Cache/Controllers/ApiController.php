@@ -6,28 +6,26 @@
  * Time: 17:54
  */
 
-namespace Famoser\SyncApi\Controllers;
+namespace Famoser\XKCD\Cache\Controllers;
 
 
-use Famoser\SyncApi\Controllers\Base\ApiRequestController;
-use Famoser\SyncApi\Controllers\Base\BaseController;
-use Famoser\SyncApi\Controllers\Base\FrontendController;
-use Famoser\SyncApi\Exceptions\ServerException;
-use Famoser\SyncApi\Models\ApiInformation;
-use Famoser\SyncApi\Models\Communication\Response\RefreshResponse;
-use Famoser\SyncApi\Models\Communication\Response\StatusResponse;
-use Famoser\SyncApi\Models\Communication\Response\XKCDJson;
-use Famoser\SyncApi\Models\Entities\Comic;
-use Famoser\SyncApi\Types\Downloader;
-use Famoser\SyncApi\Types\DownloadStatus;
-use Famoser\SyncApi\Types\ServerError;
+use Famoser\XKCD\Cache\Controllers\Base\BaseController;
+use Famoser\XKCD\Cache\Exceptions\ServerException;
+use Famoser\XKCD\Cache\Models\Communication\Response\RefreshResponse;
+use Famoser\XKCD\Cache\Models\Communication\Response\StatusResponse;
+use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Models\Entities\Comic;
+use Famoser\XKCD\Cache\Types\Downloader;
+use Famoser\XKCD\Cache\Types\DownloadStatus;
+use Famoser\XKCD\Cache\Types\ServerError;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use ZipArchive;
 
 /**
  * the public controller displays the index page & other pages accessible to everyone
  *
- * @package Famoser\SyncApi\Controllers
+ * @package Famoser\XKCD\Cache\Controllers
  */
 class ApiController extends BaseController
 {
@@ -49,22 +47,6 @@ class ApiController extends BaseController
 
     /**
      * returns the newest XKCD comic
-     * @return Comic
-     * @throws ServerException
-     */
-    protected function getNewestCacheComic()
-    {
-        try {
-            $dbService = $this->getDatabaseService();
-            return $dbService->getSingleFromDatabase(new Comic(), null, null, "number DESC");
-        } catch (\Exception $ex) {
-            $this->getLoggingService()->log("failed to fetch comic from cache: " . $ex);
-            throw new ServerException(ServerError::CACHE_INACCESSIBLE);
-        }
-    }
-
-    /**
-     * returns the newest XKCD comic
      * @param $number
      * @return bool
      * @throws ServerException
@@ -77,10 +59,12 @@ class ApiController extends BaseController
             $comic = new Comic();
             $comic->num = $number;
             try {
+                //download json
                 $myJson = file_get_contents("https://xkcd.com/" . $number . "/info.0.json");
                 /* @var XKCDJson $myJsonObject */
                 $myJsonObject = json_decode($myJson);
 
+                //construct comic
                 $comic->status = DownloadStatus::SUCCESSFUL;
                 $comic->link = $myJsonObject->link;
                 $comic->news = $myJsonObject->news;
@@ -93,16 +77,19 @@ class ApiController extends BaseController
                 $comic->download_date_time = time();
                 $comic->downloaded_by = Downloader::VERSION_1;
                 $comic->json = $myJsonObject;
+                $comic->filename = substr($comic->img, strrpos($comic->img, "/") + 1);
 
                 try {
-                    file_put_contents($this->getLoggingService(), file_get_contents($comic->img));
+                    //download image
+                    $contents = file_get_contents($comic->img);
+                    file_put_contents($this->getSettingsArray()["image_cache_path"] . DIRECTORY_SEPARATOR . $comic->filename, $contents);
                 } catch (\Exception $ex) {
-
+                    $comic->status = DownloadStatus::IMAGE_DOWNLOAD_FAILED;
+                    $this->getLoggingService()->log("could not download comic " . $number . ": " . $ex);
                 }
-
             } catch (\Exception $ex) {
-                $comic->status = DownloadStatus::UNKNOWN_ERROR;
-                $this->getLoggingService()->log("could not download comic " . $number . ": " . $ex);
+                $comic->status = DownloadStatus::JSON_DOWNLOAD_FAILED;
+                $this->getLoggingService()->log("could not download json " . $number . ": " . $ex);
             }
 
             return $dbService->saveToDatabase($comic);
@@ -110,6 +97,25 @@ class ApiController extends BaseController
             $this->getLoggingService()->log("failed to cache comic: " . $ex);
         }
         return false;
+    }
+
+    /**
+     * creates a zip file of all the images with the target number as filename
+     *
+     * @param $targetNumber
+     */
+    protected function createImageZip($targetNumber)
+    {
+        $zip = new ZipArchive();
+        $filename = $this->getSettingsArray()["zip_cache_path"] . DIRECTORY_SEPARATOR . $targetNumber . ".zip";
+
+        if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
+            $this->getLoggingService()->log("could not create zip file at " . $filename);
+        }
+
+        $zip->addGlob($this->getSettingsArray()["image_cache_path"] . DIRECTORY_SEPARATOR . "*");
+        $this->getLoggingService()->log("created zip file with " . $zip->numFiles . " files. status: " . $zip->status);
+        $zip->close();
     }
 
     /**
@@ -129,6 +135,7 @@ class ApiController extends BaseController
         for ($i = $newestCache->num; $i < $newestOnline->num; $i++) {
             $this->cacheComic($i);
         }
+        $this->createImageZip($newestOnline->num);
 
         $failed = $this->getDatabaseService()->getFromDatabase(new Comic(), "status <> :status", ["status" => DownloadStatus::SUCCESSFUL]);
         foreach ($failed as $item) {

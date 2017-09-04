@@ -6,18 +6,15 @@
  * Time: 15:08
  */
 
-namespace Famoser\SyncApi\Middleware\Base;
+namespace Famoser\XKCD\Cache\Middleware\Base;
 
 
-use Famoser\SyncApi\Framework\ContainerBase;
-use Famoser\SyncApi\Services\Interfaces\LoggingServiceInterface;
-use Famoser\SyncApi\XKCDCacheApp;
-use Interop\Container\ContainerInterface;
+use Famoser\XKCD\Cache\Framework\ContainerBase;
 
 /**
  * the base class for all middleware
  *
- * @package Famoser\SyncApi\Middleware
+ * @package Famoser\XKCD\Cache\Middleware
  */
 class BaseMiddleware extends ContainerBase
 {

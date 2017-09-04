@@ -6,20 +6,17 @@
  * Time: 11:26
  */
 
-namespace Famoser\SyncApi\Controllers\Base;
+namespace Famoser\XKCD\Cache\Controllers\Base;
 
 
-use Famoser\SyncApi\Models\Entities\FrontendUser;
-use Famoser\SyncApi\Services\SessionService;
 use Slim\Http\Response;
 
 /**
  * a frontend controller displays information in the web application.
- * @package Famoser\SyncApi\Controllers\Base
+ * @package Famoser\XKCD\Cache\Controllers\Base
  */
 class FrontendController extends BaseController
 {
-
     /**
      * @param Response $response
      * @param string $path

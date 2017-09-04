@@ -6,26 +6,19 @@
  * Time: 15:25
  */
 
-namespace Famoser\SyncApi\Services;
+namespace Famoser\XKCD\Cache\Services;
 
-use Famoser\SyncApi\Models\Entities\Comic;
-use Famoser\SyncApi\Models\Entities\ApplicationSetting;
-use Famoser\SyncApi\Models\Entities\AuthorizationCode;
-use Famoser\SyncApi\Models\Entities\Base\BaseEntity;
-use Famoser\SyncApi\Models\Entities\Collection;
-use Famoser\SyncApi\Models\Entities\ContentVersion;
-use Famoser\SyncApi\Models\Entities\Device;
-use Famoser\SyncApi\Models\Entities\Entity;
-use Famoser\SyncApi\Models\Entities\FrontendUser;
-use Famoser\SyncApi\Services\Base\BaseService;
-use Famoser\SyncApi\Services\Interfaces\DatabaseServiceInterface;
+use Famoser\XKCD\Cache\Models\Entities\Base\BaseEntity;
+use Famoser\XKCD\Cache\Models\Entities\Comic;
+use Famoser\XKCD\Cache\Services\Base\BaseService;
+use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
 use Interop\Container\ContainerInterface;
 use PDO;
 
 /**
  * the DatabaseService allows access to the database. It abstracts sql from logic, and is type safe
  *
- * @package Famoser\SyncApi\Helpers
+ * @package Famoser\XKCD\Cache\Helpers
  */
 class DatabaseService extends BaseService implements DatabaseServiceInterface
 {

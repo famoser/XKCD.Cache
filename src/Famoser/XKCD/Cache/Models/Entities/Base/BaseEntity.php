@@ -6,12 +6,12 @@
  * Time: 21:15
  */
 
-namespace Famoser\SyncApi\Models\Entities\Base;
+namespace Famoser\XKCD\Cache\Models\Entities\Base;
 
 
 /**
  * the base database entry, has an id, and allows for the overriding class to specify a table name
- * @package Famoser\SyncApi\Models\Entities\Base
+ * @package Famoser\XKCD\Cache\Models\Entities\Base
  */
 abstract class BaseEntity
 {

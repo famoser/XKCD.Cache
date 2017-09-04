@@ -6,18 +6,17 @@
  * Time: 17:54
  */
 
-namespace Famoser\SyncApi\Controllers;
+namespace Famoser\XKCD\Cache\Controllers;
 
 
-use Famoser\SyncApi\Controllers\Base\FrontendController;
-use Famoser\SyncApi\Models\ApiInformation;
+use Famoser\XKCD\Cache\Controllers\Base\FrontendController;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * the public controller displays the index page & other pages accessible to everyone
  *
- * @package Famoser\SyncApi\Controllers
+ * @package Famoser\XKCD\Cache\Controllers
  */
 class PublicController extends FrontendController
 {
@@ -32,20 +31,5 @@ class PublicController extends FrontendController
     public function index(Request $request, Response $response, $args)
     {
         return $this->renderTemplate($response, 'public/index', $args);
-    }
-
-    /**
-     * show api info as json. Should be enough to configure the C# library
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param $args
-     * @return Response
-     */
-    public function info(Request $request, Response $response, $args)
-    {
-        $apiInfo = new ApiInformation();
-        $apiInfo->Modulo = (int)$this->getSettingsArray()['api_modulo'];
-        return $this->returnJson($response, $apiInfo);
     }
 }

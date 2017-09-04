@@ -6,13 +6,13 @@
  * Time: 12:29
  */
 
-namespace Famoser\SyncApi\Types;
+namespace Famoser\XKCD\Cache\Types;
 
 
 /**
  * used to distinguish frontend errors
  *
- * @package Famoser\SyncApi\Types
+ * @package Famoser\XKCD\Cache\Types
  */
 class FrontendError
 {

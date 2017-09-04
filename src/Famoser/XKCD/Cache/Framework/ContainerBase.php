@@ -6,22 +6,19 @@
  * Time: 20:56
  */
 
-namespace Famoser\SyncApi\Framework;
+namespace Famoser\XKCD\Cache\Framework;
 
 
-use Famoser\SyncApi\Services\Interfaces\DatabaseServiceInterface;
-use Famoser\SyncApi\Services\Interfaces\LoggingServiceInterface;
-use Famoser\SyncApi\Services\Interfaces\MailServiceInterface;
-use Famoser\SyncApi\Services\Interfaces\RequestServiceInterface;
-use Famoser\SyncApi\Services\Interfaces\SessionServiceInterface;
-use Famoser\SyncApi\XKCDCacheApp;
+use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
+use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
+use Famoser\XKCD\Cache\XKCDCacheApp;
 use Interop\Container\ContainerInterface;
 use Slim\Interfaces\RouterInterface;
 
 /**
  * resolves the classes distributed by the ContainerInterface
  *
- * @package Famoser\SyncApi\Framework
+ * @package Famoser\XKCD\Cache\Framework
  */
 class ContainerBase
 {
@@ -66,26 +63,6 @@ class ContainerBase
     public function getDatabaseService()
     {
         return $this->container->get(XKCDCacheApp::DATABASE_SERVICE_KEY);
-    }
-
-    /**
-     * get database helper, used for database access
-     *
-     * @return SessionServiceInterface
-     */
-    public function getSessionService()
-    {
-        return $this->container->get(XKCDCacheApp::SESSION_SERVICE_KEY);
-    }
-
-    /**
-     * get mailer
-     *
-     * @return MailServiceInterface
-     */
-    public function getMailService()
-    {
-        return $this->container->get(XKCDCacheApp::MAIL_SERVICE_KEY);
     }
 
     /**

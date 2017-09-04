@@ -6,7 +6,7 @@
  * Time: 16:49
  */
 
-namespace Famoser\SyncApi\Models\Entities;
+namespace Famoser\XKCD\Cache\Models\Entities;
 
 /*
 CREATE TABLE 'applications' (
@@ -20,11 +20,11 @@ CREATE TABLE 'applications' (
 );
 */
 
-use Famoser\SyncApi\Models\Entities\Base\BaseEntity;
+use Famoser\XKCD\Cache\Models\Entities\Base\BaseEntity;
 
 /**
  * represents a comic from XKCD
- * @package Famoser\SyncApi\Models\Entities
+ * @package Famoser\XKCD\Cache\Models\Entities
  */
 class Comic extends BaseEntity
 {
@@ -39,6 +39,9 @@ class Comic extends BaseEntity
 
     /* @var int $download_date_time type_of:timestamp */
     public $download_date_time;
+
+    /* @var string $filename*/
+    public $filename;
 
     /* @var int $publish_date type_of:timestamp */
     public $publish_date;

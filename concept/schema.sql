@@ -3,6 +3,7 @@ CREATE TABLE `comics` (
   `id`                 INTEGER DEFAULT NULL PRIMARY KEY AUTOINCREMENT,
   `download_date_time` DATETIME,
   `downloaded_by`      INTEGER,
+  `filename`           TEXT,
   `status`             INTEGER,
   `status_message`     TEXT,
   `num`                INTEGER UNIQUE,

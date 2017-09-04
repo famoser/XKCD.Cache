@@ -6,16 +6,12 @@
  * Time: 19:20
  */
 
-namespace Famoser\SyncApi\Models\Communication\Response;
+namespace Famoser\XKCD\Cache\Models\Communication\Response;
 
-
-use Famoser\SyncApi\Models\Communication\Entities\DeviceCommunicationEntity;
-use Famoser\SyncApi\Models\Communication\Entities\UserCommunicationEntity;
-use Famoser\SyncApi\Models\Communication\Response\Base\BaseResponse;
 
 /**
  * the response to an AuthorizationRequest
- * @package Famoser\SyncApi\Models\Communication\Response
+ * @package Famoser\XKCD\Cache\Models\Communication\Response
  */
 class XKCDJson
 {

@@ -6,16 +6,16 @@
  * Time: 11:12
  */
 
-namespace Famoser\SyncApi\Exceptions;
+namespace Famoser\XKCD\Cache\Exceptions;
 
 
-use Famoser\SyncApi\Types\ServerError;
+use Famoser\XKCD\Cache\Types\ServerError;
 
 /**
  * a server exception occurs, if a critical action on the server fails (like saving to the database)
  * but the user has no way of changing anything of that behaviour. The user should not receive an unhelpful
  * error message, but rather a 'sorry, but we can't continue' kind of behaviour
- * @package Famoser\SyncApi\Exceptions
+ * @package Famoser\XKCD\Cache\Exceptions
  */
 class ServerException extends \Exception
 {

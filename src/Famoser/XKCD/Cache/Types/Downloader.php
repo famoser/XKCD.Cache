@@ -6,12 +6,12 @@
  * Time: 13:23
  */
 
-namespace Famoser\SyncApi\Types;
+namespace Famoser\XKCD\Cache\Types;
 
 /**
  * downloader versions
  *
- * @package Famoser\SyncApi\Types
+ * @package Famoser\XKCD\Cache\Types
  */
 class Downloader
 {

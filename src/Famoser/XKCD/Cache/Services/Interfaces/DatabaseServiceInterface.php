@@ -6,23 +6,16 @@
  * Time: 20:13
  */
 
-namespace Famoser\SyncApi\Services\Interfaces;
+namespace Famoser\XKCD\Cache\Services\Interfaces;
 
 
-use Famoser\SyncApi\Models\Entities\Comic;
-use Famoser\SyncApi\Models\Entities\ApplicationSetting;
-use Famoser\SyncApi\Models\Entities\AuthorizationCode;
-use Famoser\SyncApi\Models\Entities\Base\BaseEntity;
-use Famoser\SyncApi\Models\Entities\Collection;
-use Famoser\SyncApi\Models\Entities\ContentVersion;
-use Famoser\SyncApi\Models\Entities\Device;
-use Famoser\SyncApi\Models\Entities\Entity;
-use Famoser\SyncApi\Models\Entities\FrontendUser;
+use Famoser\XKCD\Cache\Models\Entities\Base\BaseEntity;
+use Famoser\XKCD\Cache\Models\Entities\Comic;
 
 /**
  * Interface DatabaseServiceInterface
  *
- * @package Famoser\SyncApi\Services\Interfaces
+ * @package Famoser\XKCD\Cache\Services\Interfaces
  */
 interface DatabaseServiceInterface
 {
@@ -35,8 +28,7 @@ interface DatabaseServiceInterface
      * @param null|array $parameters
      * @param int $limit
      * @param string $selector
-     * @return Comic[]|ApplicationSetting[]|AuthorizationCode[]|Collection[]|ContentVersion[]|Device[]|
-     * Entity[]|FrontendUser[]|User[]|UserCollection[]
+     * @return Comic[]
      */
     public function getFromDatabase(
         BaseEntity $entity,
@@ -76,8 +68,7 @@ interface DatabaseServiceInterface
      * @param null|string $orderBy
      * @param null|array $parameters
      * @param int $limit
-     * @return Comic[]|ApplicationSetting[]|AuthorizationCode[]|Collection[]|ContentVersion[]|Device[]|
-     * Entity[]|FrontendUser[]|User[]|UserCollection[]
+     * @return Comic[]
      */
     public function getWithInFromDatabase(
         BaseEntity $entity,
@@ -97,8 +88,7 @@ interface DatabaseServiceInterface
      * @param null|string $where
      * @param null|array $parameters
      * @param null|string $orderBy
-     * @return null|Comic|ApplicationSetting|AuthorizationCode|Collection|ContentVersion|Device|Entity|
-     * FrontendUser|User|UserCollection
+     * @return null|Comic
      */
     public function getSingleFromDatabase(BaseEntity $entity, $where = null, $parameters = null, $orderBy = null);
 
@@ -107,8 +97,7 @@ interface DatabaseServiceInterface
      *
      * @param BaseEntity $entity
      * @param int $entityId
-     * @return null|Comic|ApplicationSetting|AuthorizationCode|Collection|ContentVersion|Device|Entity|
-     * FrontendUser|User|UserCollection
+     * @return null|Comic
      */
     public function getSingleByIdFromDatabase(BaseEntity $entity, $entityId);
 

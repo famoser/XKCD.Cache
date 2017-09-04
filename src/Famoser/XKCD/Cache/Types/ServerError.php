@@ -6,19 +6,22 @@
  * Time: 12:29
  */
 
-namespace Famoser\SyncApi\Types;
+namespace Famoser\XKCD\Cache\Types;
 
 
 /**
  * used to distinguish frontend errors
  *
- * @package Famoser\SyncApi\Types
+ * @package Famoser\XKCD\Cache\Types
  */
 class ServerError
 {
     const CONNECTION_FAILED = 10;
     const CACHE_INACCESSIBLE = 11;
-    const CACHING_FAILED = 11;
+    const CACHING_FAILED = 12;
+    const METHOD_NOT_ALLOWED = 13;
+    const NODE_NOT_FOUND = 14;
+    const CACHE_EMPTY = 15;
 
     /**
      * convert to string
@@ -35,6 +38,10 @@ class ServerError
                 return "could not access the cache";
             case static::CACHING_FAILED:
                 return "could not cache the comic";
+            case static::METHOD_NOT_ALLOWED:
+                return "this method is now allowed";
+            case static::NODE_NOT_FOUND:
+                return "end node not found";
             default:
                 return 'unknown error occurred with code ' . $code;
         }

@@ -6,15 +6,15 @@
  * Time: 12:42
  */
 
-namespace Famoser\SyncApi\Services;
+namespace Famoser\XKCD\Cache\Services;
 
-use Famoser\SyncApi\Services\Base\BaseService;
-use Famoser\SyncApi\Services\Interfaces\LoggingServiceInterface;
+use Famoser\XKCD\Cache\Services\Base\BaseService;
+use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
 
 /**
  * the logger service is concerned to save errors which occurred while the application is running
  *
- * @package Famoser\SyncApi\Services
+ * @package Famoser\XKCD\Cache\Services
  */
 class LoggingService extends BaseService implements LoggingServiceInterface
 {

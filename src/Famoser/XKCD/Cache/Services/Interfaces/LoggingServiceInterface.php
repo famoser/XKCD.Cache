@@ -6,12 +6,12 @@
  * Time: 12:42
  */
 
-namespace Famoser\SyncApi\Services\Interfaces;
+namespace Famoser\XKCD\Cache\Services\Interfaces;
 
 
 /**
  * the interface to a logger, which logs errors
- * @package Famoser\SyncApi\Services\Interfaces
+ * @package Famoser\XKCD\Cache\Services\Interfaces
  */
 interface LoggingServiceInterface
 {

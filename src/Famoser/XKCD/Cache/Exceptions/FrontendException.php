@@ -6,14 +6,14 @@
  * Time: 12:27
  */
 
-namespace Famoser\SyncApi\Exceptions;
+namespace Famoser\XKCD\Cache\Exceptions;
 
 
-use Famoser\SyncApi\Types\FrontendError;
+use Famoser\XKCD\Cache\Types\FrontendError;
 
 /**
  * if an exception while displaying a page in the frontend occurs, this exception typ eis thrown
- * @package Famoser\SyncApi\Exceptions
+ * @package Famoser\XKCD\Cache\Exceptions
  */
 class FrontendException extends \Exception
 {

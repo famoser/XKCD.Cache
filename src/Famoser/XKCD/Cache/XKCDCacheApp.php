@@ -6,21 +6,15 @@
  * Time: 19:10
  */
 
-namespace Famoser\SyncApi;
+namespace Famoser\XKCD\Cache;
 
 
-use Famoser\SyncApi\Exceptions\ApiException;
-use Famoser\SyncApi\Exceptions\FrontendException;
-use Famoser\SyncApi\Middleware\LoggingMiddleware;
-use Famoser\SyncApi\Models\Communication\Response\Base\BaseResponse;
-use Famoser\SyncApi\Services\DatabaseService;
-use Famoser\SyncApi\Services\Interfaces\LoggingServiceInterface;
-use Famoser\SyncApi\Services\LoggingService;
-use Famoser\SyncApi\Services\MailService;
-use Famoser\SyncApi\Services\RequestService;
-use Famoser\SyncApi\Services\SessionService;
-use Famoser\SyncApi\Types\DownloadStatus;
-use Famoser\SyncApi\Types\FrontendError;
+use Famoser\XKCD\Cache\Exceptions\ServerException;
+use Famoser\XKCD\Cache\Models\Communication\Response\Base\BaseResponse;
+use Famoser\XKCD\Cache\Services\DatabaseService;
+use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
+use Famoser\XKCD\Cache\Services\LoggingService;
+use Famoser\XKCD\Cache\Types\ServerError;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +28,7 @@ use Slim\Views\TwigExtension;
 /**
  * the sync api application, in one neat class :)
  *
- * @package Famoser\SyncApi
+ * @package Famoser\XKCD\Cache
  */
 class XKCDCacheApp extends App
 {
@@ -42,8 +36,6 @@ class XKCDCacheApp extends App
 
     const DATABASE_SERVICE_KEY = 'databaseService';
     const LOGGING_SERVICE_KEY = 'loggingService';
-    const SESSION_SERVICE_KEY = 'sessionService';
-    const MAIL_SERVICE_KEY = 'mailService';
 
     const SETTINGS_KEY = 'settings';
 
@@ -100,43 +92,18 @@ class XKCDCacheApp extends App
         $controllerNamespace = $this->controllerNamespace;
         return function () use ($controllerNamespace) {
             $this->get('/', $controllerNamespace . 'PublicController:index')->setName('index');
-            $this->get('/info', $controllerNamespace . 'PublicController:info')->setName('api_info');
-
-            $this->get('/login', $controllerNamespace . 'LoginController:login')->setName('login');
-            $this->post('/login', $controllerNamespace . 'LoginController:loginPost');
-
-            $this->get('/register', $controllerNamespace . 'LoginController:register')->setName('register');
-            $this->post('/register', $controllerNamespace . 'LoginController:registerPost');
-
-            $this->get('/forgot', $controllerNamespace . 'LoginController:forgot')->setName('forgot');
-            $this->post('/forgot', $controllerNamespace . 'LoginController:forgotPost');
-
-            $this->get('/recover', $controllerNamespace . 'LoginController:recover')->setName('recover');
-            $this->post('/recover', $controllerNamespace . 'LoginController:recoverPost');
 
             $this->group(
-                '/dashboard',
+                '/comic',
                 function () use ($controllerNamespace) {
-                    $this->get('/', $controllerNamespace . 'ApplicationController:index')
-                        ->setName('application_index');
-                    $this->get('/show/{id}', $controllerNamespace . 'ApplicationController:show')
-                        ->setName('application_show');
+                    $this->get('/', $controllerNamespace . 'ComicController:index')
+                        ->setName('comic_index');
 
-                    $this->get('/new', $controllerNamespace . 'ApplicationController:create')
-                        ->setName('application_new');
-                    $this->post('/new', $controllerNamespace . 'ApplicationController:createPost');
+                    $this->get('/show/{id}', $controllerNamespace . 'ComicController:show')
+                        ->setName('comic_show');
 
-                    $this->get('/edit/{id}', $controllerNamespace . 'ApplicationController:edit')
-                        ->setName('application_edit');
-                    $this->post('/edit/{id}', $controllerNamespace . 'ApplicationController:editPost');
-
-                    $this->get('/settings/{id}', $controllerNamespace . 'ApplicationController:settings')
-                        ->setName('application_settings');
-                    $this->post('/settings/{id}', $controllerNamespace . 'ApplicationController:settingsPost');
-
-                    $this->get('/delete/{id}', $controllerNamespace . 'ApplicationController:remove')
-                        ->setName('application_delete');
-                    $this->post('/delete/{id}', $controllerNamespace . 'ApplicationController:removePost');
+                    $this->get('/refresh/{id}', $controllerNamespace . 'ComicController:refresh')
+                        ->setName('comic_new');
                 }
             );
         };
@@ -150,45 +117,22 @@ class XKCDCacheApp extends App
     private function getApiRoutes()
     {
         $controllerNamespace = $this->controllerNamespace;
+
         return function () use ($controllerNamespace) {
-            $this->group(
-                '/auth',
-                function () use ($controllerNamespace) {
-                    $this->post('/use', $controllerNamespace . 'AuthorizationController:useCode');
-                    $this->post('/generate', $controllerNamespace . 'AuthorizationController:generate');
-                    $this->post('/sync', $controllerNamespace . 'AuthorizationController:sync');
-                    $this->post('/status', $controllerNamespace . 'AuthorizationController:status');
-                }
-            );
+            $this->get('/refresh', $controllerNamespace . 'ApiController:index')->setName('api_refresh');
+            $this->get('/status', $controllerNamespace . 'ApiController:index')->setName('api_status');
 
             $this->group(
-                '/users',
+                '/comic',
                 function () use ($controllerNamespace) {
-                    $this->post('/auth', $controllerNamespace . 'UserController:auth');
-                }
-            );
+                    $this->get('/', $controllerNamespace . 'ComicController:index')
+                        ->setName('comic_index');
 
-            $this->group(
-                '/devices',
-                function () use ($controllerNamespace) {
-                    $this->post('/get', $controllerNamespace . 'DeviceController:get');
-                    $this->post('/auth', $controllerNamespace . 'DeviceController:auth');
-                    $this->post('/unauth', $controllerNamespace . 'DeviceController:unAuth');
-                }
-            );
+                    $this->get('/show/{id}', $controllerNamespace . 'ComicController:show')
+                        ->setName('comic_show');
 
-            $this->group(
-                '/collections',
-                function () use ($controllerNamespace) {
-                    $this->post('/sync', $controllerNamespace . 'CollectionController:sync');
-                }
-            );
-
-            $this->group(
-                '/entities',
-                function () use ($controllerNamespace) {
-                    $this->post('/sync', $controllerNamespace . 'EntityController:sync');
-                    $this->post('/history/sync', $controllerNamespace . 'EntityController:historySync');
+                    $this->get('/refresh/{id}', $controllerNamespace . 'ComicController:refresh')
+                        ->setName('comic_new');
                 }
             );
         };
@@ -244,8 +188,8 @@ class XKCDCacheApp extends App
         //third argument: \Exception
         $container['errorHandler'] = $errorHandler;
 
-        $container['notAllowedHandler'] = $this->createNotFoundHandlerClosure($container, DownloadStatus::METHOD_NOT_ALLOWED);
-        $container['notFoundHandler'] = $this->createNotFoundHandlerClosure($container, DownloadStatus::NODE_NOT_FOUND);
+        $container['notAllowedHandler'] = $this->createNotFoundHandlerClosure($container, ServerError::METHOD_NOT_ALLOWED);
+        $container['notFoundHandler'] = $this->createNotFoundHandlerClosure($container, ServerError::NODE_NOT_FOUND);
     }
 
     /**
@@ -256,7 +200,7 @@ class XKCDCacheApp extends App
      */
     private function isApiRequest(ServerRequestInterface $request)
     {
-        return strpos($request->getUri()->getPath(), '/1.0/') === 0 && $request->getMethod() == 'POST';
+        return strpos($request->getUri()->getPath(), '/1.0/') === 0;
     }
 
     /**
@@ -272,16 +216,15 @@ class XKCDCacheApp extends App
             return function (ServerRequestInterface $request, ResponseInterface $response) use ($container, $apiError) {
 
                 /* @var LoggingServiceInterface $logger */
-                $logger =  $container[XKCDCacheApp::LOGGING_SERVICE_KEY];
+                $logger = $container[XKCDCacheApp::LOGGING_SERVICE_KEY];
                 $logger->log(
-                    "[".date("c")."]: not found / not allowed " . $request->getUri()
+                    "[" . date("c") . "]: not found / not allowed " . $request->getUri()
                 );
 
                 if ($this->isApiRequest($request)) {
                     $resp = new BaseResponse();
-                    $resp->RequestFailed = true;
-                    $resp->ApiError = $apiError;
-                    $resp->ServerMessage = DownloadStatus::toString($apiError);
+                    $resp->successful = false;
+                    $resp->error_message = ServerError::toString($apiError);
                     return $response->withStatus(500)->withJson($resp);
                 }
                 return $container['view']->render($response, 'public/not_found.html.twig', []);
@@ -308,32 +251,22 @@ class XKCDCacheApp extends App
                 }
 
                 /* @var LoggingServiceInterface $logger */
-                $logger =  $cont[XKCDCacheApp::LOGGING_SERVICE_KEY];
+                $logger = $cont[XKCDCacheApp::LOGGING_SERVICE_KEY];
                 $logger->log(
-                    "[".date("c")."]: ".$errorString
+                    "[" . date("c") . "]: " . $errorString
                 );
 
                 //return json if api request
                 if ($this->isApiRequest($request)) {
                     $resp = new BaseResponse();
-                    $resp->RequestFailed = true;
-                    if ($error instanceof ApiException) {
-                        $resp->ApiError = $error->getCode();
+                    $resp->successful = false;
+                    if ($errorString instanceof ServerException) {
+                        $resp->error_message = $error->getMessage();
                     } else {
-                        $resp->ApiError = DownloadStatus::SERVER_ERROR;
+                        $resp->error_message = $errorString;
                     }
-                    $resp->ServerMessage = $errorString;
                     return $cont['response']->withStatus(500)->withJson($resp);
                 } else {
-                    //behaviour for FrontendExceptions
-                    if ($error instanceof FrontendException) {
-                        //tried to access page where you need to be logged in
-                        if ($error->getCode() == FrontendError::NOT_LOGGED_IN) {
-                            $reqUri = $request->getUri()->withPath($cont->get('router')->pathFor('login'));
-                            return $cont['response']->withStatus(403)->withRedirect($reqUri);
-                        }
-                    }
-
                     //general error page
                     $args = [];
                     $args['error'] = $errorString;
@@ -353,17 +286,8 @@ class XKCDCacheApp extends App
         $container[XKCDCacheApp::LOGGING_SERVICE_KEY] = function (Container $container) {
             return new LoggingService($container);
         };
-        $container[XKCDCacheApp::REQUEST_SERVICE_KEY] = function (Container $container) {
-            return new RequestService($container);
-        };
         $container[XKCDCacheApp::DATABASE_SERVICE_KEY] = function (Container $container) {
             return new DatabaseService($container);
-        };
-        $container[XKCDCacheApp::SESSION_SERVICE_KEY] = function (Container $container) {
-            return new SessionService($container);
-        };
-        $container[XKCDCacheApp::MAIL_SERVICE_KEY] = function (Container $container) {
-            return new MailService($container);
         };
     }
 }
