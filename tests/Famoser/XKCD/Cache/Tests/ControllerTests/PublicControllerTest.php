@@ -57,7 +57,7 @@ class PublicControllerTest extends FrontendTestController
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
         $containerBase = new ContainerBase($this->getTestHelper()->getTestApp()->getContainer());
-        static::assertContains((string)$containerBase->getSettingsArray()["api_modulo"], $responseStr);
+        static::assertContains((string)$containerBase->getSettingService(), $responseStr);
 
         $jsonOb = json_decode($responseStr);
         static::assertNotNull($jsonOb);

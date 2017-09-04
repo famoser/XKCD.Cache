@@ -37,12 +37,7 @@ class CacheService extends BaseService implements CacheServiceInterface
                 $this->getLoggingService()->log("could not create zip file at " . $filename);
             }
 
-            $files = glob($this->getSettingService()->getImageCachePath() . DIRECTORY_SEPARATOR . "*");
-            //todo: test
-            var_dump($files);
-            for ($i = 1; $i < $files; $i++) {
-                //add to archive if number smaller/equal than the number specified above
-            }
+            $zip->addGlob($this->getSettingService()->getImageCachePath() . DIRECTORY_SEPARATOR . "*");
             $this->getLoggingService()->log("created zip file with " . $zip->numFiles . " files. status: " . $zip->status);
             $zip->close();
             return true;
@@ -102,6 +97,12 @@ class CacheService extends BaseService implements CacheServiceInterface
         return $dbService->saveToDatabase($comic);
     }
 
+    /**
+     * returns the path of the zip for this number
+     *
+     * @param $number
+     * @return string
+     */
     private function constructZipPath($number)
     {
         return $this->getSettingService()->getZipCachePath() . DIRECTORY_SEPARATOR . $number . ".zip";

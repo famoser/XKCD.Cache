@@ -256,7 +256,11 @@ class XKCDCacheApp extends App
                 } else {
                     //general error page
                     $args = [];
-                    $args['error'] = $errorString;
+                    if ($containerBase->getSettingService()->getDebugMode()) {
+                        $args['error'] = $errorString;
+                    } else {
+                        $args['error'] = "";
+                    }
                     return $container['view']->render($response, 'public/server_error.html.twig', $args);
                 }
             };

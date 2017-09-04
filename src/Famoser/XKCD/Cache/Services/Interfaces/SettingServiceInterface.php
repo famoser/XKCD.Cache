@@ -82,4 +82,11 @@ interface SettingServiceInterface
      * @return string
      */
     public function getZipCachePath();
+
+    /**
+     * maximum number of downloaded images of one request to /refresh
+     *
+     * @return int
+     */
+    public function getMaxRefreshImages();
 }

@@ -3,8 +3,17 @@
 {% block title %}your comics{% endblock title %}
 
 {% block content %}
+    <p>
+        show <a href="{{ path_for("comics_index") }}">all</a> or
+        <a href="{{ path_for("comics_failed") }}">only failed</a>
+    </p>
+    <p>
+        access the json resources: see the <a href="{{ path_for("api_status") }}">status</a> or <a
+                href="{{ path_for("api_refresh") }}">refresh</a> the cache
+    </p>
+
     {% if comics | length == 0 %}
-        <p>The are no comics cached yet</p>
+        <p>The are no comics in this list</p>
     {% else %}
         <h3>your cached comics</h3>
         <table class="table">
@@ -25,18 +34,11 @@
                     <td>{{ comic.publish_date|date("d.m.Y") }}</td>
                     <td>{{ comic.status }}</td>
                     <td>
-                        <a href="{{ path_for('comics_view', {'id': comic.id}) }}">view</a>
+                        <a href="{{ path_for('comics_show', {'id': comic.id}) }}">view</a>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     {% endif %}
-    <p>
-        show <a href="{{ path_for("comics_index") }}">all</a> or
-        <a href="{{ path_for("comics_failed") }}">only failed</a>
-    </p>
-    <p>
-        access the json resources: see the <a href="{{ path_for("api_status") }}">status</a> or <a href="{{ path_for("api_refresh") }}">refresh</a> the cache
-    </p>
 {% endblock content %}

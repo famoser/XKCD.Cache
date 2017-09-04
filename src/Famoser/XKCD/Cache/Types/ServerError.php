@@ -24,6 +24,7 @@ class ServerError
     const CACHE_EMPTY = 15;
     const ZIP_FAILED = 16;
     const ZIP_NOT_FOUND = 17;
+    const XKCD_CONNECTION_FAILED = 18;
 
     /**
      * convert to string

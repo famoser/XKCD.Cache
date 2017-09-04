@@ -16,6 +16,7 @@ use Famoser\XKCD\Cache\Models\Response\RefreshResponse;
 use Famoser\XKCD\Cache\Models\Response\StatusResponse;
 use Famoser\XKCD\Cache\Models\XKCD\XKCDJson;
 use Famoser\XKCD\Cache\Types\DownloadStatus;
+use Famoser\XKCD\Cache\Types\ServerError;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -32,7 +33,7 @@ class ApiController extends BaseController
      * @return bool
      * @throws ServerException
      */
-    protected function cacheComic($number)
+    private function cacheComic($number)
     {
         try {
             /* @var XKCDJson $myJsonObject */
@@ -44,6 +45,11 @@ class ApiController extends BaseController
         return false;
     }
 
+    /**
+     * the newest comic contained in cache
+     *
+     * @return int
+     */
     private function getNewestCacheNumber()
     {
         $newestCache = $this->getCacheService()->getNewestComic();
@@ -56,25 +62,48 @@ class ApiController extends BaseController
     }
 
     /**
+     * the newest comic available online
+     *
+     * @return int|bool
+     */
+    private function getNewestOnlineNumber()
+    {
+        $newestOnline = $this->getCacheService()->getNewestComic();
+        if ($newestOnline instanceof XKCDJson) {
+            return $newestOnline->num;
+        } else {
+            $this->getLoggingService()->log("XKCD server not available");
+            return false;
+        }
+    }
+
+    /**
      * show basic info about this application
      *
      * @param Request $request
      * @param Response $response
      * @param $args
      * @return Response
+     * @throws ServerException
      */
     public function refresh(Request $request, Response $response, $args)
     {
-        $newestOnline = $this->getXKCDService()->getNewestComic();
+        $newestOnlineNumber = $this->getNewestOnlineNumber();
+        if ($newestOnlineNumber === false) {
+            throw new ServerException(ServerError::XKCD_CONNECTION_FAILED);
+        }
+
         $newestCachedNumber = $this->getNewestCacheNumber();
 
-        if ($newestCachedNumber < $newestOnline->num) {
-            $maxIterations = 10;
-            for ($i = $newestCachedNumber + 1; $i < $newestOnline->num && $maxIterations > 0; $i++) {
+
+        if ($newestCachedNumber < $newestCachedNumber) {
+            $maxIterations = $this->getSettingService()->getMaxRefreshImages();
+            $i = $newestCachedNumber + 1;
+            for (; $i < $newestOnlineNumber && $maxIterations > 0; $i++) {
                 $maxIterations--;
                 $this->cacheComic($i);
             }
-            $this->getCacheService()->createImageZip($newestOnline->num);
+            $this->getCacheService()->createImageZip($i);
         }
 
         $refreshResponse = new RefreshResponse();
@@ -99,17 +128,22 @@ class ApiController extends BaseController
      * @param Response $response
      * @param $args
      * @return Response
+     * @throws ServerException
      */
     public function status(Request $request, Response $response, $args)
     {
+        $newestOnlineNumber = $this->getNewestOnlineNumber();
+        if ($newestOnlineNumber === false) {
+            throw new ServerException(ServerError::XKCD_CONNECTION_FAILED);
+        }
+
         $newestCachedNumber = $this->getNewestCacheNumber();
-        $newestOnline = $this->getXKCDService()->getNewestComic();
 
         $apiInfo = new StatusResponse();
         $apiInfo->api_version = 1;
         $apiInfo->latest_image_cached = $newestCachedNumber;
-        $apiInfo->latest_image_published = $newestOnline->num;
-        $apiInfo->hot = $newestCachedNumber == $newestOnline->num;
+        $apiInfo->latest_image_published = $newestOnlineNumber;
+        $apiInfo->hot = $newestCachedNumber >= $newestOnlineNumber;
 
         return $this->returnJson($response, $apiInfo);
     }

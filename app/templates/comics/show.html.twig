@@ -1,5 +1,5 @@
 {% extends "layout.html.twig" %}
-{% import "../makros/elements.html.twig" as elements %}
+{% import "macros/elements.html.twig" as elements %}
 
 {% block title %}show comic{% endblock title %}
 
@@ -10,27 +10,27 @@
     <img class="img-responsive" src="{{ image_public_path }}">
 
     <h2>download info</h2>
-    {{ keyValue("downloaded by", comic.getDownloadedByAsText) }}
-    {{ keyValue("download datetime", comic.download_date_time|date("d.m.Y H:i")) }}
-    {{ keyValue("status", comic.getStatusAsText) }}
-    {{ keyValue("status message", comic.status_message) }}
-    {{ keyValue("filename", comic.filename) }}
     <hr/>
+    {{ elements.key_value("downloaded by", comic.getDownloadedByAsText) }}
+    {{ elements.key_value("download datetime", comic.download_date_time|date("d.m.Y H:i")) }}
+    {{ elements.key_value("status", comic.getStatusAsText) }}
+    {{ elements.key_value("status message", comic.status_message) }}
+    {{ elements.key_value("filename", comic.filename) }}
     <h2>comic info</h2>
-    {{ keyValue("num", comic.num) }}
-    {{ keyValue("title", comic.title) }}
-    {{ keyValue("alt", comic.alt) }}
-    {{ keyValue("publish date", comic.publish_date|date("d.m.Y")) }}
-    {{ keyValue("num", comic.num) }}
-    {{ keyValue("link", comic.link) }}
-    {{ keyValue("safe title", comic.safe_title) }}
-    {{ keyValue("news", comic.news) }}
     <hr/>
+    {{ elements.key_value("num", comic.num) }}
+    {{ elements.key_value("title", comic.title) }}
+    {{ elements.key_value("alt", comic.alt) }}
+    {{ elements.key_value("publish date", comic.publish_date|date("d.m.Y")) }}
+    {{ elements.key_value("num", comic.num) }}
+    {{ elements.key_value("link", comic.link) }}
+    {{ elements.key_value("safe title", comic.safe_title) }}
+    {{ elements.key_value("news", comic.news) }}
     <h2>raw</h2>
-    {{ keyValue("transcript", comic.transcript) }}
-    {{ keyValue("json", comic.json) }}
-
     <hr/>
+    {{ elements.key_value("transcript", comic.transcript) }}
+    {{ elements.key_value("json", comic.json) }}
+
     <p>
         show <a href="{{ path_for("comics_index") }}">all</a> or
         <a href="{{ path_for("comics_failed") }}">only failed</a>
