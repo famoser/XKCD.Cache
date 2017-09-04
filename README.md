@@ -28,15 +28,20 @@ downloads all images & json missing from the cache. the response is of the follo
     "successful": true,
     "error_message": null,
     "missing_images": [],
-    "missing_json": []
+    "missing_json": [],
+    "refresh_count": 0,
+    "refresh_cap": 10,
+    "refresh_pending": false
 }
 ```
 	
-`successful` can be `true` or `false`. This should be true.  
+`successful` is a boolean indicating if the request was successful (`true`) or if an error occurred (`false`).  
 `missing_images` contains an array of all images it failed to download. This array might not be empty.  
 `missing_json` contains an array of all json it failed to download. This array should be empty.  
 `error_message` is a string and contains the error if `successful` is set to true.  
-
+`refresh_count` is an int indicating how many images were downloaded in the refresh step  
+`refresh_cap` is an int indicating how many images are max downloaded in each refresh step  
+`refresh_pending` is a bool which is `true` if further refresh calls are necessary to refresh cache
 
 ### /status
 checks if the cache is hot (all images all downloaded). the response is of the following form:  
@@ -52,9 +57,9 @@ checks if the cache is hot (all images all downloaded). the response is of the f
 }
 ```
 	
-`successful` can be `true` or `false`. This should be true.  
+`successful` is a boolean indicating if the request was successful (`true`) or if an error occurred (`false`).
 `error_message` is a string and contains the error if `successful` is set to true.  
-`hot` can be `true` or `false`. If set to `true` the cache is actual. If set to `false`, you may call `/refresh` to refresh the cache.  
-`latest_image_published` contains the number of the last published image on XKCD.
-`latest_image_cached` contains the number of the last cached image in the cache. this number is smaller / equal the number in `latest_image_published` and ideally the same.
-`api_version` contains the version of the deployed API.
+`hot` is a boolean. If set to `true` the cache is fresh (no files missing). If set to `false`, you may call `/refresh` to refresh the cache.  
+`latest_image_published` is an int which is the number of the last published image on XKCD.
+`latest_image_cached` is an int which is the number of the last cached image in the cache. this number is smaller / equal the number in `latest_image_published` and ideally the same.
+`api_version` is an int containing the version of the deployed API.

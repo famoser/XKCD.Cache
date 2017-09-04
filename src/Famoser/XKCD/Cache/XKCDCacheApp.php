@@ -247,10 +247,10 @@ class XKCDCacheApp extends App
                 if ($this->isApiRequest($request)) {
                     $resp = new BaseResponse();
                     $resp->successful = false;
-                    if ($errorString instanceof ServerException) {
-                        $resp->error_message = $error->getMessage();
-                    } else {
+                    if ($containerBase->getSettingService()->getDebugMode() || !($error instanceof ServerException)) {
                         $resp->error_message = $errorString;
+                    } else {
+                        $resp->error_message = $error->getMessage();
                     }
                     return $container['response']->withStatus(500)->withJson($resp);
                 } else {

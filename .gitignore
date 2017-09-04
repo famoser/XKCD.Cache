@@ -23,6 +23,7 @@ src/public/dist/js/pre/
 
 #excluding image cache
 src/public/images/xkcd/*
+src/public/zip/*
 
 #excluding deployment/dev files
 servers.yml

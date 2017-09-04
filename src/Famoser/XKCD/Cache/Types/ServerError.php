@@ -45,6 +45,14 @@ class ServerError
                 return "this method is now allowed";
             case static::NODE_NOT_FOUND:
                 return "end node not found";
+            case static::CACHE_EMPTY:
+                return "the cache is empty";
+            case static::ZIP_FAILED:
+                return "zip could not be created";
+            case static::ZIP_NOT_FOUND:
+                return "zip not found";
+            case static::XKCD_CONNECTION_FAILED:
+                return "the server is not accessible";
             default:
                 return 'unknown error occurred with code ' . $code;
         }

@@ -68,8 +68,8 @@ class ApiController extends BaseController
      */
     private function getNewestOnlineNumber()
     {
-        $newestOnline = $this->getCacheService()->getNewestComic();
-        if ($newestOnline instanceof XKCDJson) {
+        $newestOnline = $this->getXKCDService()->getNewestComic();
+        if ($newestOnline != null) {
             return $newestOnline->num;
         } else {
             $this->getLoggingService()->log("XKCD server not available");
@@ -95,18 +95,22 @@ class ApiController extends BaseController
 
         $newestCachedNumber = $this->getNewestCacheNumber();
 
-
-        if ($newestCachedNumber < $newestCachedNumber) {
+        $refreshCount = 0;
+        if ($newestCachedNumber < $newestOnlineNumber) {
             $maxIterations = $this->getSettingService()->getMaxRefreshImages();
-            $i = $newestCachedNumber + 1;
-            for (; $i < $newestOnlineNumber && $maxIterations > 0; $i++) {
+            $newestCachedNumber++;
+            for (; $newestCachedNumber < $newestOnlineNumber && $maxIterations > 0; $newestCachedNumber++) {
                 $maxIterations--;
-                $this->cacheComic($i);
+                $refreshCount++;
+                $this->cacheComic($newestCachedNumber);
             }
-            $this->getCacheService()->createImageZip($i);
+            $this->getCacheService()->createImageZip($newestCachedNumber);
         }
 
         $refreshResponse = new RefreshResponse();
+        $refreshResponse->refresh_count = $refreshCount;
+        $refreshResponse->refresh_cap = $this->getSettingService()->getMaxRefreshImages();
+        $refreshResponse->refresh_pending = $newestCachedNumber != $newestOnlineNumber;
 
         $failed = $this->getDatabaseService()->getFromDatabase(new Comic(), "status <> :status", ["status" => DownloadStatus::SUCCESSFUL]);
         foreach ($failed as $item) {

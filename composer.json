@@ -39,7 +39,7 @@
   "autoload": {
     "psr-4": {
       "Famoser\\XKCD\\Cache\\": "src/Famoser/XKCD/Cache/",
-      "Famoser\\XKCD\\Cache\\\\Tests\\": "tests/Famoser/XKCD/Cache/Tests"
+      "Famoser\\XKCD\\Cache\\Tests\\": "tests/Famoser/XKCD/Cache/Tests"
     }
   }
 }
