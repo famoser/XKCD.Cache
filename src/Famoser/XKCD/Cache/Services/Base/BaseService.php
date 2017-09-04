@@ -18,13 +18,4 @@ use Famoser\XKCD\Cache\Framework\ContainerBase;
  */
 class BaseService extends ContainerBase
 {
-    /**
-     * return the base path for the log files
-     *
-     * @return string
-     */
-    protected function getLoggingFilePath()
-    {
-        return $this->getSettingsArray()['log_file_path'];
-    }
 }

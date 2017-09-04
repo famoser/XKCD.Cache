@@ -26,22 +26,6 @@ use Slim\Http\Response;
 class BaseController extends ContainerBase
 {
     /**
-     * returns the newest XKCD comic
-     * @return Comic
-     * @throws ServerException
-     */
-    protected function getNewestCacheComic()
-    {
-        try {
-            $dbService = $this->getDatabaseService();
-            return $dbService->getSingleFromDatabase(new Comic(), null, null, "number DESC");
-        } catch (\Exception $ex) {
-            $this->getLoggingService()->log("failed to fetch comic from cache: " . $ex);
-            throw new ServerException(ServerError::CACHE_INACCESSIBLE);
-        }
-    }
-
-    /**
      * redirects to the route specified in $slug
      *
      * @param  Request $request

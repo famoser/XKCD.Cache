@@ -22,11 +22,4 @@ interface LoggingServiceInterface
      * @return void
      */
     public function log($message);
-
-    /**
-     * get path where the log files are saved
-     *
-     * @return string
-     */
-    public function getLogPath();
 }

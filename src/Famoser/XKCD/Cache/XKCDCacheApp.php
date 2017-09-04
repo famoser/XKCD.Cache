@@ -9,11 +9,19 @@
 namespace Famoser\XKCD\Cache;
 
 
+use Famoser\XKCD\Cache\Controllers\ApiController;
+use Famoser\XKCD\Cache\Controllers\ComicController;
+use Famoser\XKCD\Cache\Controllers\PublicController;
 use Famoser\XKCD\Cache\Exceptions\ServerException;
+use Famoser\XKCD\Cache\Framework\ContainerBase;
 use Famoser\XKCD\Cache\Models\Communication\Response\Base\BaseResponse;
+use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Services\CacheService;
 use Famoser\XKCD\Cache\Services\DatabaseService;
 use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
 use Famoser\XKCD\Cache\Services\LoggingService;
+use Famoser\XKCD\Cache\Services\SettingService;
+use Famoser\XKCD\Cache\Services\XKCDService;
 use Famoser\XKCD\Cache\Types\ServerError;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
@@ -32,13 +40,6 @@ use Slim\Views\TwigExtension;
  */
 class XKCDCacheApp extends App
 {
-    private $controllerNamespace = 'Famoser\\XKCD\\Cache\\Controllers\\';
-
-    const DATABASE_SERVICE_KEY = 'databaseService';
-    const LOGGING_SERVICE_KEY = 'loggingService';
-
-    const SETTINGS_KEY = 'settings';
-
     /**
      * Create new application
      *
@@ -47,21 +48,10 @@ class XKCDCacheApp extends App
      */
     public function __construct($configuration)
     {
-        //$configuration
-        $configuration = array_merge(
-            [
-                'displayErrorDetails' => false,
-                'debug_mode' => false
-            ],
-            $configuration
-        );
-
         //construct parent with container
         parent::__construct(
             $this->constructContainer(
-                [
-                    XKCDCacheApp::SETTINGS_KEY => $configuration
-                ]
+                $configuration
             )
         );
 
@@ -89,21 +79,17 @@ class XKCDCacheApp extends App
      */
     private function getWebAppRoutes()
     {
-        $controllerNamespace = $this->controllerNamespace;
-        return function () use ($controllerNamespace) {
-            $this->get('/', $controllerNamespace . 'PublicController:index')->setName('index');
+        return function () {
+            $this->get('/', PublicController::class . ':index')->setName('index');
 
             $this->group(
                 '/comic',
-                function () use ($controllerNamespace) {
-                    $this->get('/', $controllerNamespace . 'ComicController:index')
-                        ->setName('comic_index');
+                function () {
+                    $this->get('/', ComicController::class . ':index')->setName('comic_index');
 
-                    $this->get('/show/{id}', $controllerNamespace . 'ComicController:show')
-                        ->setName('comic_show');
+                    $this->get('/show/{id}', ComicController::class . ':show')->setName('comic_show');
 
-                    $this->get('/refresh/{id}', $controllerNamespace . 'ComicController:refresh')
-                        ->setName('comic_new');
+                    $this->get('/refresh/{id}', ComicController::class . ':refresh')->setName('comic_new');
                 }
             );
         };
@@ -116,23 +102,18 @@ class XKCDCacheApp extends App
      */
     private function getApiRoutes()
     {
-        $controllerNamespace = $this->controllerNamespace;
-
-        return function () use ($controllerNamespace) {
-            $this->get('/refresh', $controllerNamespace . 'ApiController:index')->setName('api_refresh');
-            $this->get('/status', $controllerNamespace . 'ApiController:index')->setName('api_status');
+        return function () {
+            $this->get('/refresh', ApiController::class . ':index')->setName('api_refresh');
+            $this->get('/status', ApiController::class . ':index')->setName('api_status');
 
             $this->group(
                 '/comic',
-                function () use ($controllerNamespace) {
-                    $this->get('/', $controllerNamespace . 'ComicController:index')
-                        ->setName('comic_index');
+                function () {
+                    $this->get('/', ComicController::class . ':index')->setName('comic_index');
 
-                    $this->get('/show/{id}', $controllerNamespace . 'ComicController:show')
-                        ->setName('comic_show');
+                    $this->get('/show/{id}', ComicController::class . ':show')->setName('comic_show');
 
-                    $this->get('/refresh/{id}', $controllerNamespace . 'ComicController:refresh')
-                        ->setName('comic_new');
+                    $this->get('/refresh/{id}', ComicController::class . ':refresh')->setName('comic_new');
                 }
             );
         };
@@ -152,13 +133,17 @@ class XKCDCacheApp extends App
         $this->addHandlers($container);
         $this->addServices($container);
 
+        //construct base container to get services now needed to configure other services
+        $baseContainer = new ContainerBase($container);
+        $settings = $baseContainer->getSettingService();
+
         //add view
-        $container['view'] = function (Container $container) {
+        $container['view'] = function (Container $container) use ($settings) {
             $view = new Twig(
-                $container->get(XKCDCacheApp::SETTINGS_KEY)['template_path'],
+                $settings->getTemplatePath(),
                 [
-                    'cache' => $container->get(XKCDCacheApp::SETTINGS_KEY)['cache_path'],
-                    'debug' => $container->get(XKCDCacheApp::SETTINGS_KEY)['debug_mode']
+                    'cache' => $settings->getCachePath(),
+                    'debug' => $settings->getDebugMode()
                 ]
             );
             $view->addExtension(
@@ -178,18 +163,19 @@ class XKCDCacheApp extends App
      * add the error handlers to the container
      *
      * @param Container $container
+     * @param ContainerBase $containerBase
      */
-    private function addHandlers(Container $container)
+    private function addHandlers(Container $container, ContainerBase $containerBase)
     {
-        $errorHandler = $this->createErrorHandlerClosure($container);
+        $errorHandler = $this->createErrorHandlerClosure($container, $containerBase);
 
         //third argument: \Throwable
         $container['phpErrorHandler'] = $errorHandler;
         //third argument: \Exception
         $container['errorHandler'] = $errorHandler;
 
-        $container['notAllowedHandler'] = $this->createNotFoundHandlerClosure($container, ServerError::METHOD_NOT_ALLOWED);
-        $container['notFoundHandler'] = $this->createNotFoundHandlerClosure($container, ServerError::NODE_NOT_FOUND);
+        $container['notAllowedHandler'] = $this->createNotFoundHandlerClosure($container, $containerBase, ServerError::METHOD_NOT_ALLOWED);
+        $container['notFoundHandler'] = $this->createNotFoundHandlerClosure($container, $containerBase, ServerError::NODE_NOT_FOUND);
     }
 
     /**
@@ -207,16 +193,17 @@ class XKCDCacheApp extends App
      * creates a closure which has no third argument
      *
      * @param ContainerInterface $container
+     * @param ContainerBase $containerBase
      * @param $apiError
      * @return \Closure
      */
-    private function createNotFoundHandlerClosure(ContainerInterface $container, $apiError)
+    private function createNotFoundHandlerClosure(ContainerInterface $container, ContainerBase $containerBase, $apiError)
     {
-        return function () use ($container, $apiError) {
-            return function (ServerRequestInterface $request, ResponseInterface $response) use ($container, $apiError) {
+        return function () use ($container, $apiError, $containerBase) {
+            return function (ServerRequestInterface $request, ResponseInterface $response) use ($container, $apiError, $containerBase) {
 
                 /* @var LoggingServiceInterface $logger */
-                $logger = $container[XKCDCacheApp::LOGGING_SERVICE_KEY];
+                $logger = $containerBase->getLoggingService();
                 $logger->log(
                     "[" . date("c") . "]: not found / not allowed " . $request->getUri()
                 );
@@ -235,13 +222,14 @@ class XKCDCacheApp extends App
     /**
      * creates a closure which accepts \Exception and \Throwable as third argument
      *
-     * @param ContainerInterface $cont
+     * @param ContainerInterface $container
+     * @param ContainerBase $containerBase
      * @return \Closure
      */
-    private function createErrorHandlerClosure(ContainerInterface $cont)
+    private function createErrorHandlerClosure(ContainerInterface $container, ContainerBase $containerBase)
     {
-        return function () use ($cont) {
-            return function (ServerRequestInterface $request, ResponseInterface $response, $error = null) use ($cont) {
+        return function () use ($container, $containerBase) {
+            return function (ServerRequestInterface $request, ResponseInterface $response, $error = null) use ($container, $containerBase) {
                 if ($error instanceof \Exception || $error instanceof \Throwable) {
                     $errorString = $error->getFile() . ' (' . $error->getLine() . ')\n' .
                         $error->getCode() . ': ' . $error->getMessage() . '\n' .
@@ -251,7 +239,7 @@ class XKCDCacheApp extends App
                 }
 
                 /* @var LoggingServiceInterface $logger */
-                $logger = $cont[XKCDCacheApp::LOGGING_SERVICE_KEY];
+                $logger = $containerBase->getLoggingService();
                 $logger->log(
                     "[" . date("c") . "]: " . $errorString
                 );
@@ -265,12 +253,12 @@ class XKCDCacheApp extends App
                     } else {
                         $resp->error_message = $errorString;
                     }
-                    return $cont['response']->withStatus(500)->withJson($resp);
+                    return $container['response']->withStatus(500)->withJson($resp);
                 } else {
                     //general error page
                     $args = [];
                     $args['error'] = $errorString;
-                    return $cont['view']->render($response, 'public/server_error.html.twig', $args);
+                    return $container['view']->render($response, 'public/server_error.html.twig', $args);
                 }
             };
         };
@@ -283,11 +271,20 @@ class XKCDCacheApp extends App
      */
     private function addServices(Container $container)
     {
-        $container[XKCDCacheApp::LOGGING_SERVICE_KEY] = function (Container $container) {
+        $container[ContainerBase::LOGGING_SERVICE_KEY] = function (Container $container) {
             return new LoggingService($container);
         };
-        $container[XKCDCacheApp::DATABASE_SERVICE_KEY] = function (Container $container) {
+        $container[ContainerBase::DATABASE_SERVICE_KEY] = function (Container $container) {
             return new DatabaseService($container);
+        };
+        $container[ContainerBase::SETTING_SERVICE_KEY] = function (Container $container) {
+            return new SettingService($container);
+        };
+        $container[ContainerBase::XKCD_SERVICE_KEY] = function (Container $container) {
+            return new XKCDService($container);
+        };
+        $container[ContainerBase::CACHE_SERVICE_KEY] = function (Container $container) {
+            return new CacheService($container);
         };
     }
 }

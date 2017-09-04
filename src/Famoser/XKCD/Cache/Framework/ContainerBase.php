@@ -9,8 +9,12 @@
 namespace Famoser\XKCD\Cache\Framework;
 
 
+use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Services\Interfaces\CacheServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
+use Famoser\XKCD\Cache\Services\Interfaces\SettingServiceInterface;
+use Famoser\XKCD\Cache\Services\Interfaces\XKCDServiceInterface;
 use Famoser\XKCD\Cache\XKCDCacheApp;
 use Interop\Container\ContainerInterface;
 use Slim\Interfaces\RouterInterface;
@@ -22,6 +26,12 @@ use Slim\Interfaces\RouterInterface;
  */
 class ContainerBase
 {
+    const DATABASE_SERVICE_KEY = 'databaseService';
+    const LOGGING_SERVICE_KEY = 'loggingService';
+    const CACHE_SERVICE_KEY = 'cacheService';
+    const XKCD_SERVICE_KEY = 'xkcdService';
+    const SETTING_SERVICE_KEY = 'settingService';
+
     /* @var ContainerInterface $container */
     private $container;
 
@@ -36,33 +46,53 @@ class ContainerBase
     }
 
     /**
-     * return the logging service
-     *
-     * @return LoggingServiceInterface
-     */
-    public function getLoggingService()
-    {
-        return $this->container->get(XKCDCacheApp::LOGGING_SERVICE_KEY);
-    }
-
-    /**
-     * return the logger
-     *
-     * @return string[]
-     */
-    public function getSettingsArray()
-    {
-        return $this->container->get(XKCDCacheApp::SETTINGS_KEY);
-    }
-
-    /**
      * get database helper, used for database access
      *
      * @return DatabaseServiceInterface
      */
     public function getDatabaseService()
     {
-        return $this->container->get(XKCDCacheApp::DATABASE_SERVICE_KEY);
+        return $this->container->get(static::DATABASE_SERVICE_KEY);
+    }
+
+    /**
+     * return the logging service
+     *
+     * @return LoggingServiceInterface
+     */
+    public function getLoggingService()
+    {
+        return $this->container->get(static::LOGGING_SERVICE_KEY);
+    }
+
+    /**
+     * get database helper, used for database access
+     *
+     * @return CacheServiceInterface
+     */
+    public function getCacheService()
+    {
+        return $this->container->get(static::CACHE_SERVICE_KEY);
+    }
+
+    /**
+     * get database helper, used for database access
+     *
+     * @return XKCDServiceInterface
+     */
+    public function getXKCDService()
+    {
+        return $this->container->get(static::XKCD_SERVICE_KEY);
+    }
+
+    /**
+     * get a service which allows access to settings
+     *
+     * @return SettingServiceInterface
+     */
+    public function getSettingService()
+    {
+        return $this->container->get(static::SETTING_SERVICE_KEY);
     }
 
     /**

@@ -21,10 +21,15 @@ use Famoser\XKCD\Cache\Tests\TestHelpers\AssertHelper;
  * tests the user controller methods
  * @package Famoser\XKCD\Cache\Tests\ControllerTests
  */
-class UserControllerTest extends ApiTestController
+class ApiControllerTest extends ApiTestController
 {
-    public function testAuth()
+    /**
+     * tests the refresh method
+     */
+    public function testRefresh()
     {
+
+
         //test create
         $syncRequest = new AuthorizationRequest();
         $this->testHelper->authorizeRequest($syncRequest);

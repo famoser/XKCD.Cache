@@ -68,12 +68,12 @@ class PublicControllerTest extends FrontendTestController
      */
     public function test404AndInvalidMethodNode()
     {
-        $this->getTestHelper()->mockRequest("info", "postdata");
+        $this->getTestHelper()->mockRequest("", "postdata");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
         static::assertContains("not find", $responseStr);
 
-        $this->getTestHelper()->mockRequest("23141", "postdata");
+        $this->getTestHelper()->mockRequest("wrong_url", "postdata");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
         static::assertContains("not find", $responseStr);

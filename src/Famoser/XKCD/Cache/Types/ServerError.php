@@ -22,6 +22,8 @@ class ServerError
     const METHOD_NOT_ALLOWED = 13;
     const NODE_NOT_FOUND = 14;
     const CACHE_EMPTY = 15;
+    const ZIP_FAILED = 16;
+    const ZIP_NOT_FOUND = 17;
 
     /**
      * convert to string

@@ -1,0 +1,100 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: famoser
+ * Date: 04/09/2017
+ * Time: 13:29
+ */
+
+namespace Famoser\XKCD\Cache\Services;
+
+
+use Famoser\XKCD\Cache\Entities\Comic;
+use Famoser\XKCD\Cache\Exceptions\ServerException;
+use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Services\Base\BaseService;
+use Famoser\XKCD\Cache\Services\Interfaces\CacheServiceInterface;
+use Famoser\XKCD\Cache\Types\Downloader;
+use Famoser\XKCD\Cache\Types\DownloadStatus;
+use Famoser\XKCD\Cache\Types\ServerError;
+
+class CacheService extends BaseService implements CacheServiceInterface
+{
+    /**
+     * creates a zip file of all the images contained in the image folder with the target number as filename
+     *
+     * @param $number
+     * @return bool
+     * @throws ServerException
+     */
+    public function createImageZip($number)
+    {
+        try {
+            $zip = new \ZipArchive();
+            $filename = $this->getSettingService()->getZipCachePath() . DIRECTORY_SEPARATOR . $number . ".zip";
+
+            if ($zip->open($filename, \ZipArchive::CREATE) !== TRUE) {
+                $this->getLoggingService()->log("could not create zip file at " . $filename);
+            }
+
+            $zip->addGlob($this->getSettingService()->getImageCachePath() . DIRECTORY_SEPARATOR . "*");
+            $this->getLoggingService()->log("created zip file with " . $zip->numFiles . " files. status: " . $zip->status);
+            $zip->close();
+            return true;
+        } catch (\Exception $ex) {
+            $this->getLoggingService()->log("failed to create zip: " . $ex);
+            throw new ServerException(ServerError::ZIP_FAILED);
+        }
+    }
+
+    /**
+     * returns the newest XKCD comic
+     *
+     * @return Comic
+     * @throws ServerException
+     */
+    public function getNewestComic()
+    {
+        return $this->getDatabaseService()->getSingleFromDatabase(new Comic(), null, null, "num DESC");
+    }
+
+    /**
+     * persists the passed XKCD comic
+     *
+     * @param XKCDJson $XKCDComic
+     * @return bool
+     */
+    public function persistComic($XKCDComic)
+    {
+        $dbService = $this->getDatabaseService();
+
+        //construct comic
+        $comic = new Comic();
+        $comic->num = $XKCDComic->num;
+        $comic->status = DownloadStatus::SUCCESSFUL;
+        $comic->link = $XKCDComic->link;
+        $comic->news = $XKCDComic->news;
+        $comic->transcript = $XKCDComic->transcript;
+        $comic->safe_title = $XKCDComic->safe_title;
+        $comic->alt = $XKCDComic->alt;
+        $comic->img = $XKCDComic->img;
+        $comic->title = $XKCDComic->title;
+        $comic->publish_date = strtotime($XKCDComic->day . "." . $XKCDComic->month . "." . $XKCDComic->year);
+        $comic->download_date_time = time();
+        $comic->downloaded_by = Downloader::VERSION_1;
+        $comic->json = $XKCDComic;
+        $comic->filename = substr($comic->img, strrpos($comic->img, "/") + 1);
+
+        try {
+            //download image
+            $contents = file_get_contents($comic->img);
+            file_put_contents($this->getSettingsArray()["image_cache_path"] . DIRECTORY_SEPARATOR . $comic->filename, $contents);
+        } catch (\Exception $ex) {
+            $comic->status = DownloadStatus::IMAGE_DOWNLOAD_FAILED;
+            $this->getLoggingService()->log("could not download comic " . $XKCDComic->num . ": " . $ex);
+        }
+
+        return $dbService->saveToDatabase($comic);
+
+    }
+}

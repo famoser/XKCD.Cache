@@ -33,12 +33,12 @@ class DownloadController extends BaseController
      */
     public function downloadZip(Request $request, Response $response, $args)
     {
-        $newestComic = $this->getNewestCacheComic();
+        $newestComic = $this->getCacheService()->getNewestComic();
         if (!($newestComic instanceof Comic)) {
             throw new ServerException(ServerError::CACHE_EMPTY);
         }
 
-        $zipCachePath = $this->getSettingsArray()["zip_cache_path"] . DIRECTORY_SEPARATOR;
+        $zipCachePath = $this->getSettingService()->getZipCachePath() . DIRECTORY_SEPARATOR;
         $currentNum = $newestComic->num;
         do {
             $zipPath = $zipCachePath . $currentNum . ".zip";
@@ -49,7 +49,7 @@ class DownloadController extends BaseController
             return $this->returnRawFile($response, "application/zip", "xkcd_comics.zip", filesize($zipPath), file_get_contents($zipPath));
         }
 
-        throw new ServerException(ServerError::CACHE_EMPTY);
+        throw new ServerException(ServerError::ZIP_NOT_FOUND);
     }
 
     /**

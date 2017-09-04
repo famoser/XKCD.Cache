@@ -31,22 +31,6 @@ class ApiController extends BaseController
 {
     /**
      * returns the newest XKCD comic
-     * @return XKCDJson
-     * @throws ServerException
-     */
-    protected function getNewestOnlineComic()
-    {
-        try {
-            $newestJson = file_get_contents("https://xkcd.com/info.0.json");
-            return json_decode($newestJson);
-        } catch (\Exception $ex) {
-            $this->getLoggingService()->log("failed to fetch comic from xkcd: " . $ex);
-            throw new ServerException(ServerError::CONNECTION_FAILED);
-        }
-    }
-
-    /**
-     * returns the newest XKCD comic
      * @param $number
      * @return bool
      * @throws ServerException
@@ -54,68 +38,13 @@ class ApiController extends BaseController
     protected function cacheComic($number)
     {
         try {
-            $dbService = $this->getDatabaseService();
-
-            $comic = new Comic();
-            $comic->num = $number;
-            try {
-                //download json
-                $myJson = file_get_contents("https://xkcd.com/" . $number . "/info.0.json");
-                /* @var XKCDJson $myJsonObject */
-                $myJsonObject = json_decode($myJson);
-
-                //construct comic
-                $comic->status = DownloadStatus::SUCCESSFUL;
-                $comic->link = $myJsonObject->link;
-                $comic->news = $myJsonObject->news;
-                $comic->transcript = $myJsonObject->transcript;
-                $comic->safe_title = $myJsonObject->safe_title;
-                $comic->alt = $myJsonObject->alt;
-                $comic->img = $myJsonObject->img;
-                $comic->title = $myJsonObject->title;
-                $comic->publish_date = strtotime($myJsonObject->day . "." . $myJsonObject->month . "." . $myJsonObject->year);
-                $comic->download_date_time = time();
-                $comic->downloaded_by = Downloader::VERSION_1;
-                $comic->json = $myJsonObject;
-                $comic->filename = substr($comic->img, strrpos($comic->img, "/") + 1);
-
-                try {
-                    //download image
-                    $contents = file_get_contents($comic->img);
-                    file_put_contents($this->getSettingsArray()["image_cache_path"] . DIRECTORY_SEPARATOR . $comic->filename, $contents);
-                } catch (\Exception $ex) {
-                    $comic->status = DownloadStatus::IMAGE_DOWNLOAD_FAILED;
-                    $this->getLoggingService()->log("could not download comic " . $number . ": " . $ex);
-                }
-            } catch (\Exception $ex) {
-                $comic->status = DownloadStatus::JSON_DOWNLOAD_FAILED;
-                $this->getLoggingService()->log("could not download json " . $number . ": " . $ex);
-            }
-
-            return $dbService->saveToDatabase($comic);
+            /* @var XKCDJson $myJsonObject */
+            $myJsonObject = $this->getXKCDService()->getComic($number);
+            return $this->getCacheService()->persistComic($myJsonObject);
         } catch (\Exception $ex) {
             $this->getLoggingService()->log("failed to cache comic: " . $ex);
         }
         return false;
-    }
-
-    /**
-     * creates a zip file of all the images with the target number as filename
-     *
-     * @param $targetNumber
-     */
-    protected function createImageZip($targetNumber)
-    {
-        $zip = new ZipArchive();
-        $filename = $this->getSettingsArray()["zip_cache_path"] . DIRECTORY_SEPARATOR . $targetNumber . ".zip";
-
-        if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
-            $this->getLoggingService()->log("could not create zip file at " . $filename);
-        }
-
-        $zip->addGlob($this->getSettingsArray()["image_cache_path"] . DIRECTORY_SEPARATOR . "*");
-        $this->getLoggingService()->log("created zip file with " . $zip->numFiles . " files. status: " . $zip->status);
-        $zip->close();
     }
 
     /**
@@ -128,14 +57,16 @@ class ApiController extends BaseController
      */
     public function refresh(Request $request, Response $response, $args)
     {
-        $newestCache = $this->getNewestCacheComic();
-        $newestOnline = $this->getNewestOnlineComic();
+        $newestCache = $this->getCacheService()->getNewestComic();
+        $newestOnline = $this->getXKCDService()->getNewestComic();
 
         $refreshResponse = new RefreshResponse();
         for ($i = $newestCache->num; $i < $newestOnline->num; $i++) {
             $this->cacheComic($i);
         }
-        $this->createImageZip($newestOnline->num);
+        if ($newestCache->num < $newestOnline->num) {
+            $this->getCacheService()->createImageZip($newestOnline->num);
+        }
 
         $failed = $this->getDatabaseService()->getFromDatabase(new Comic(), "status <> :status", ["status" => DownloadStatus::SUCCESSFUL]);
         foreach ($failed as $item) {
@@ -160,8 +91,8 @@ class ApiController extends BaseController
      */
     public function status(Request $request, Response $response, $args)
     {
-        $newestCache = $this->getNewestCacheComic();
-        $newestOnline = $this->getNewestOnlineComic();
+        $newestCache = $this->getCacheService()->getNewestComic();
+        $newestOnline = $this->getXKCDService()->getNewestComic();
 
         $apiInfo = new StatusResponse();
         $apiInfo->api_version = 1;

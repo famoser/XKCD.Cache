@@ -25,17 +25,7 @@ class LoggingService extends BaseService implements LoggingServiceInterface
      */
     public function log($message)
     {
-        $path = $this->getLoggingFilePath();
+        $path = $this->getSettingService()->getLogFilePath();
         file_put_contents($path, $message, FILE_APPEND);
-    }
-
-    /**
-     * get path where the log files are saved
-     *
-     * @return string
-     */
-    public function getLogPath()
-    {
-        return $this->getLoggingFilePath();
     }
 }

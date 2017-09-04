@@ -6,9 +6,11 @@
  * Time: 22:40
  */
 
+use Famoser\XKCD\Cache\Services\SettingService;
+use Famoser\XKCD\Cache\XKCDCacheApp;
+
 session_start();
 
-use Famoser\SyncApi\XKCDCacheApp;
 
 //generate base path
 $ds = DIRECTORY_SEPARATOR;
@@ -20,7 +22,9 @@ $debugMode = file_exists(".debug");
 require '..' . $ds . '..' . $ds . 'vendor' . $ds . 'autoload.php';
 
 $app = new XKCDCacheApp(
-    \Famoser\XKCD\Cache\Helper\DefaultSettingsHelper::generateSettingArray($basePath, $debugMode)
+    [
+        SettingService::getSettingKey() => SettingService::generateRecommendedSettings($basePath, $debugMode)
+    ]
 );
 
 $app->run();

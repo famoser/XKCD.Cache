@@ -50,10 +50,10 @@ class DatabaseService extends BaseService implements DatabaseServiceInterface
      */
     private function initializeDatabase()
     {
-        $dataPath = $this->getSettingsArray()['db_path'];
+        $dataPath = $this->getSettingService()->getDbPath();
 
         if (!file_exists($dataPath)) {
-            $templatePath = $this->getSettingsArray()['db_template_path'];
+            $templatePath = $this->getSettingService()->getDbTemplatePath();
             copy($templatePath, $dataPath);
         }
 

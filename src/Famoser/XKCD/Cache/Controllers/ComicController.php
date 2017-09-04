@@ -61,7 +61,7 @@ class ComicController extends FrontendController
     public function show(Request $request, Response $response, $args)
     {
         $comic = $this->getDatabaseService()->getSingleFromDatabase(new Comic(), $args["id"]);
-        $imagePublicPath = $this->getSettingsArray()["image_public_base_path"] . "/" . $comic->filename;
+        $imagePublicPath = $this->getSettingService()->getImagePublicBasePath() . "/" . $comic->filename;
         return $this->renderTemplate($response, 'comics/show', $args + ["comic" => $comic, "image_public_path" => $imagePublicPath]);
     }
 }
