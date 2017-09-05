@@ -142,7 +142,10 @@ class DatabaseServiceTest extends BaseTestService
         $res = $databaseService->getFromDatabase(new Comic(), "id = :id", ["id" => $comic->id]);
         static::assertTrue(count($res) == 1);
 
-        $res = $databaseService->getFromDatabase(new Comic(), "id = :id", ["id" => $comic->id + 1]);
+        $res = $databaseService->getWithInFromDatabase(new Comic(), "id", [$comic->id], false, "num = :num", ["num" => $comic->num]);
+        static::assertTrue(count($res) == 1);
+
+        $res = $databaseService->getWithInFromDatabase(new Comic(), "id", [$comic->id], false, "num = :num", ["num" => $comic->num + 1]);
         static::assertTrue(count($res) == 0);
     }
 }

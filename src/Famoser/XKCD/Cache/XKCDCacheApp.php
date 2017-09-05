@@ -104,6 +104,7 @@ class XKCDCacheApp extends App
     {
         return function () {
             $this->get('/refresh', ApiController::class . ':refresh')->setName('api_refresh');
+            $this->get('/refresh/force', ApiController::class . ':refreshNoLimit')->setName('api_refresh_force');
             $this->get('/status', ApiController::class . ':status')->setName('api_status');
 
             $this->group(
