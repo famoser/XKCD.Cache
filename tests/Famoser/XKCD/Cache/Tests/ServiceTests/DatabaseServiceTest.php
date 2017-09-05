@@ -94,7 +94,7 @@ class DatabaseServiceTest extends BaseTestService
     public function testExecute()
     {
         $databaseService = $this->getDatabaseService();
-        $comic = $this->insertTestComic($databaseService);
+        $this->insertTestComic($databaseService);
 
         $res = $databaseService->executeAndCount("SELECT COUNT(*) FROM comics");
         static::assertTrue($res == 1);
@@ -109,5 +109,40 @@ class DatabaseServiceTest extends BaseTestService
 
         $res = $databaseService->countFromDatabase(new Comic());
         static::assertTrue($res == 0);
+    }
+
+    /**
+     * tests the execute methods
+     */
+    public function testDelete()
+    {
+        $databaseService = $this->getDatabaseService();
+        $comic = $this->insertTestComic($databaseService);
+
+        $res = $databaseService->countFromDatabase(new Comic());
+        static::assertTrue($res == 1);
+
+        static::assertTrue($databaseService->deleteFromDatabase($comic));
+
+        $res = $databaseService->countFromDatabase(new Comic());
+        static::assertTrue($res == 0);
+    }
+
+    /**
+     * tests the execute methods
+     */
+    public function testFetchEdgeCases()
+    {
+        $databaseService = $this->getDatabaseService();
+        $comic = $this->insertTestComic($databaseService);
+
+        $res = $databaseService->getFromDatabase(new Comic());
+        static::assertTrue(count($res) == 1);
+
+        $res = $databaseService->getFromDatabase(new Comic(), "id = :id", ["id" => $comic->id]);
+        static::assertTrue(count($res) == 1);
+
+        $res = $databaseService->getFromDatabase(new Comic(), "id = :id", ["id" => $comic->id + 1]);
+        static::assertTrue(count($res) == 0);
     }
 }
