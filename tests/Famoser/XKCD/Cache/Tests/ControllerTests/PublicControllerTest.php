@@ -24,7 +24,7 @@ class PublicControllerTest extends FrontendTestController
     public function testIndexNode()
     {
         //check with no comics
-        $this->getTestHelper()->mockRequest("");
+        $this->getTestHelper()->mockFullRequest("");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
         //it must contain repo name & /comics link
@@ -33,7 +33,7 @@ class PublicControllerTest extends FrontendTestController
 
         //check with one & more comic
         $this->getTestHelper()->insertComic(12);
-        $this->getTestHelper()->mockRequest("");
+        $this->getTestHelper()->mockFullRequest("");
         $response = $this->getTestHelper()->getTestApp()->run();
         AssertHelper::checkForSuccessfulResponse($this, $response);
     }

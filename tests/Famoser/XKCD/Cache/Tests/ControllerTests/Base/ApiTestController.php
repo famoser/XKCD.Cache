@@ -9,6 +9,8 @@
 namespace Famoser\XKCD\Cache\Tests\ControllerTests\Base;
 
 
+use Famoser\XKCD\Cache\Tests\Utils\Mock\CacheServiceMock;
+use Famoser\XKCD\Cache\Tests\Utils\Mock\SettingServiceMock;
 use Famoser\XKCD\Cache\Tests\Utils\TestHelper\ApiTestHelper;
 use Famoser\XKCD\Cache\Tests\Utils\TestHelper\TestHelper;
 
@@ -27,6 +29,23 @@ class ApiTestController extends BaseTestController
     protected function constructTestHelper()
     {
         return new ApiTestHelper();
+    }
+
+    /**
+     * mocks the services which safe the comics & the setting service to speed up the /refresh call
+     */
+    protected function mockRefreshServices()
+    {
+        $container = $this->getTestHelper()->getTestApp()->getContainer();
+
+        //inject mock setting service
+        $settingService = new SettingServiceMock($container);
+        $settingService->override("max_refresh_images", 3);
+        $this->getTestHelper()->getTestApp()->overrideSettingService($settingService);
+
+        $cacheService = new CacheServiceMock($container);
+        $this->getTestHelper()->getTestApp()->overrideCacheService($cacheService);
+
     }
 
     /**

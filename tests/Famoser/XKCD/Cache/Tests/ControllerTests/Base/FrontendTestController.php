@@ -63,7 +63,7 @@ abstract class FrontendTestController extends BaseTestController
      */
     private function getValidHtmlResponse($link)
     {
-        $this->getTestHelper()->mockRequest($link);
+        $this->getTestHelper()->mockFullRequest($link);
 
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);

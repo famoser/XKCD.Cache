@@ -19,17 +19,17 @@ class FrameworkControllerTest extends TestController
      */
     public function test404AndInvalidMethodNode()
     {
-        $this->getTestHelper()->mockRequest("", "postData");
+        $this->getTestHelper()->mockFullRequest("", "postData");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForFailedResponse($this, $response, 404);
         static::assertContains("not find", $responseStr);
 
-        $this->getTestHelper()->mockRequest("wrong_url");
+        $this->getTestHelper()->mockFullRequest("wrong_url");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForFailedResponse($this, $response, 404);
         static::assertContains("not find", $responseStr);
 
-        $this->getTestHelper()->mockRequest("wrong_url", "postData");
+        $this->getTestHelper()->mockFullRequest("wrong_url", "postData");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForFailedResponse($this, $response, 404);
         static::assertContains("not find", $responseStr);

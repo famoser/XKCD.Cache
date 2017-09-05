@@ -131,13 +131,13 @@ class XKCDCacheApp extends App
 
         //construct base container to get services now needed to configure other services
         $baseContainer = new ContainerBase($container);
-        $settings = $baseContainer->getSettingService();
 
         //add error handlers
         $this->addHandlers($container, $baseContainer);
 
         //add view
-        $container['view'] = function (Container $container) use ($settings) {
+        $container['view'] = function (Container $container) use ($baseContainer) {
+            $settings = $baseContainer->getSettingService();
             $view = new Twig(
                 $settings->getTemplatePath(),
                 [

@@ -9,7 +9,11 @@
 namespace Famoser\XKCD\Cache\Tests\Utils\TestApp;
 
 
+use Famoser\XKCD\Cache\Framework\ContainerBase;
+use Famoser\XKCD\Cache\Services\Interfaces\CacheServiceInterface;
+use Famoser\XKCD\Cache\Services\Interfaces\SettingServiceInterface;
 use Famoser\XKCD\Cache\XKCDCacheApp;
+use Slim\Container;
 
 class TestXKCDCacheApp extends XKCDCacheApp
 {
@@ -21,5 +25,29 @@ class TestXKCDCacheApp extends XKCDCacheApp
     public function run($silent = false)
     {
         return parent::run(true);
+    }
+
+    /**
+     * override the used setting service
+     *
+     * @param SettingServiceInterface $settingService
+     */
+    public function overrideSettingService(SettingServiceInterface $settingService)
+    {
+        $container[ContainerBase::SETTING_SERVICE_KEY] = function (Container $container) use ($settingService) {
+            return $settingService;
+        };
+    }
+
+    /**
+     * override the used cache service
+     *
+     * @param CacheServiceInterface $cacheService
+     */
+    public function overrideCacheService(CacheServiceInterface $cacheService)
+    {
+        $container[ContainerBase::CACHE_SERVICE_KEY] = function (Container $container) use ($cacheService) {
+            return $cacheService;
+        };
     }
 }

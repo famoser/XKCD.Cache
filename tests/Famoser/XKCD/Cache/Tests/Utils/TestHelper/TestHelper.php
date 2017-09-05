@@ -10,10 +10,12 @@ namespace Famoser\XKCD\Cache\Tests\Utils\TestHelper;
 
 
 use Famoser\XKCD\Cache\Framework\ContainerBase;
+use Famoser\XKCD\Cache\Services\Interfaces\SettingServiceInterface;
 use Famoser\XKCD\Cache\Services\SettingService;
 use Famoser\XKCD\Cache\Tests\Utils\ReflectionHelper;
 use Famoser\XKCD\Cache\Tests\Utils\TestApp\TestXKCDCacheApp;
 use Famoser\XKCD\Cache\XKCDCacheApp;
+use Interop\Container\ContainerInterface;
 use Slim\Http\Environment;
 
 /**
@@ -98,7 +100,7 @@ class TestHelper extends ContainerBase
     /**
      * returns the test application app
      *
-     * @return XKCDCacheApp
+     * @return TestXKCDCacheApp
      */
     public function getTestApp()
     {
@@ -123,6 +125,58 @@ class TestHelper extends ContainerBase
 
 
     private $mockAlreadyCalled;
+
+    /**
+     * mock a json POST request
+     * call app->run afterwards
+     *
+     * @param $relativeLink
+     * @param string|array $postData
+     * if null, a GET request will be sent.
+     * if array will be converted automatically to valid post data
+     * @param bool $autoReset
+     */
+    public function mockFullRequest($relativeLink, $postData = null, $autoReset = true)
+    {
+        if ($this->mockAlreadyCalled && $autoReset) {
+            $this->resetApplication();
+        }
+        $this->mockAlreadyCalled = true;
+
+        if (is_array($postData)) {
+            $posting = "";
+            foreach ($postData as $key => $value) {
+                $posting .= $key . "=" . urlencode($value) . "&";
+            }
+            $posting = substr($posting, 0, -1);
+        } else {
+            $posting = $postData;
+        }
+
+        if ($posting != null) {
+            $this->getTestApp()->overrideEnvironment(
+                Environment::mock(
+                    [
+                        'REQUEST_METHOD' => 'POST',
+                        'REQUEST_URI' => '/' . $relativeLink,
+                        'MOCK_POST_DATA' => $posting,
+                        'SERVER_NAME' => 'localhost',
+                        'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+                    ]
+                )
+            );
+        } else {
+            $this->getTestApp()->overrideEnvironment(
+                Environment::mock(
+                    [
+                        'REQUEST_URI' => '/' . $relativeLink,
+                        'SERVER_NAME' => 'localhost'
+                    ]
+                )
+            );
+        }
+    }
+
 
     /**
      * mock a json POST request

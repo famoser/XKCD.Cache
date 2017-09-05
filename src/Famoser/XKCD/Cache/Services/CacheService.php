@@ -33,7 +33,7 @@ class CacheService extends BaseService implements CacheServiceInterface
             $zip = new \ZipArchive();
             $filename = $this->getSettingService()->getZipCachePath() . DIRECTORY_SEPARATOR . $number . ".zip";
 
-            if ($zip->open($filename, \ZipArchive::CREATE) !== TRUE) {
+            if ($zip->open($filename, \ZipArchive::CREATE) !== true) {
                 $this->getLoggingService()->log("could not create zip file at " . $filename);
             }
 
