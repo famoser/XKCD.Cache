@@ -9,9 +9,7 @@
 namespace Famoser\XKCD\Cache\Tests\ControllerTests;
 
 
-use Famoser\XKCD\Cache\Framework\ContainerBase;
 use Famoser\XKCD\Cache\Tests\ControllerTests\Base\FrontendTestController;
-use Famoser\XKCD\Cache\Tests\TestHelpers\AssertHelper;
 
 /**
  * test the public nodes
@@ -20,58 +18,14 @@ use Famoser\XKCD\Cache\Tests\TestHelpers\AssertHelper;
 class PublicControllerTest extends FrontendTestController
 {
     /**
-     *  tests if all links return actual html, with no exceptions etc detectable
-     */
-    public function testPublicNodes()
-    {
-        $links = [
-            "",
-            "comics/"
-        ];
-
-        foreach ($links as $link) {
-            $this->getValidHtmlResponse($link);
-        }
-    }
-
-    /**
-     * check if the corresponding relative link is behind the login wall
+     * get all public nodes which should be accessible (return html & no error code)
      *
-     * @param $link
+     * @return string[]
      */
-    private function getValidHtmlResponse($link)
+    protected function getPublicNodes()
     {
-        $this->getTestHelper()->mockRequest($link);
-
-        $response = $this->getTestHelper()->getTestApp()->run();
-        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertNotEmpty($responseStr);
-    }
-
-    /**
-     *  tests if all links return actual html, with no exceptions etc detectable
-     */
-    public function testInfoNode()
-    {
-        $this->getTestHelper()->mockRequest("comics/");
-        $response = $this->getTestHelper()->getTestApp()->run();
-        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("your cached comics", $responseStr);
-    }
-
-    /**
-     *  tests if all links return actual html, with no exceptions etc detectable
-     */
-    public function test404AndInvalidMethodNode()
-    {
-        $this->getTestHelper()->mockRequest("", "postdata");
-        $response = $this->getTestHelper()->getTestApp()->run();
-        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("not find", $responseStr);
-
-        $this->getTestHelper()->mockRequest("wrong_url", "postdata");
-        $response = $this->getTestHelper()->getTestApp()->run();
-        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("not find", $responseStr);
+        return [
+            ""
+        ];
     }
 }

@@ -9,24 +9,24 @@
 namespace Famoser\XKCD\Cache\Tests\ControllerTests\Base;
 
 
-use Famoser\XKCD\Cache\Tests\TestHelpers\FrontendTestHelper;
+use Famoser\XKCD\Cache\Tests\Utils\AssertHelper;
+use Famoser\XKCD\Cache\Tests\Utils\TestHelper\FrontendTestHelper;
+use Famoser\XKCD\Cache\Tests\Utils\TestHelper\TestHelper;
 
 /**
  * test frontend nodes
  * @package Famoser\XKCD\Cache\Tests\ControllerTests\Base
  */
-class FrontendTestController extends \PHPUnit_Framework_TestCase
+abstract class FrontendTestController extends BaseTestController
 {
-    /* @var FrontendTestHelper $testHelper */
-    private $testHelper;
-
     /**
-     * FrontendTestController constructor.
+     * return the test helper you want to use
+     *
+     * @return TestHelper
      */
-    public function __construct()
+    protected function constructTestHelper()
     {
-        parent::__construct();
-        $this->testHelper = new FrontendTestHelper();
+        return new FrontendTestHelper();
     }
 
     /**
@@ -34,14 +34,39 @@ class FrontendTestController extends \PHPUnit_Framework_TestCase
      */
     protected function getTestHelper()
     {
-        return $this->testHelper;
+        return parent::getTestHelper();
     }
 
     /**
-     * cleans test db etc
+     * get all public nodes which should be accessible (return html & no error code)
+     *
+     * @return string[]
      */
-    public function tearDown()
+    protected abstract function getPublicNodes();
+
+    /**
+     *  tests if all links return actual html, with no exceptions etc detectable
+     */
+    public function testPublicNodes()
     {
-        $this->testHelper->cleanEnvironment();
+        $links = $this->getPublicNodes();
+
+        foreach ($links as $link) {
+            $this->getValidHtmlResponse($link);
+        }
+    }
+
+    /**
+     * check if the corresponding relative link is behind the login wall
+     *
+     * @param $link
+     */
+    private function getValidHtmlResponse($link)
+    {
+        $this->getTestHelper()->mockRequest($link);
+
+        $response = $this->getTestHelper()->getTestApp()->run();
+        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
+        static::assertNotEmpty($responseStr);
     }
 }

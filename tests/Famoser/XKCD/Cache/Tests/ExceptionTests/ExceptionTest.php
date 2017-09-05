@@ -11,7 +11,6 @@ namespace Famoser\XKCD\Cache\Tests\ExceptionTests;
 
 use Famoser\XKCD\Cache\Exceptions\FrontendException;
 use Famoser\XKCD\Cache\Exceptions\ServerException;
-use Famoser\XKCD\Cache\Types\DownloadStatus;
 use Famoser\XKCD\Cache\Types\FrontendError;
 use Famoser\XKCD\Cache\Types\ServerError;
 

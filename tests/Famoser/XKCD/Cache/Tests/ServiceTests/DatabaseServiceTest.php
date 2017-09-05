@@ -9,13 +9,9 @@
 namespace Famoser\XKCD\Cache\Tests\ServiceTests;
 
 
-use Famoser\XKCD\Cache\Framework\ContainerBase;
 use Famoser\XKCD\Cache\Entities\Comic;
-use Famoser\XKCD\Cache\Entities\FrontendUser;
-use Famoser\XKCD\Cache\Entities\User;
 use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
 use Famoser\XKCD\Cache\Tests\ServiceTests\Base\BaseTestService;
-use Famoser\XKCD\Cache\Tests\TestHelpers\FrontendTestHelper;
 
 /**
  * tests the database service

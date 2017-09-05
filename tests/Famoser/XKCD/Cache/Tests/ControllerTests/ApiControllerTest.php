@@ -12,7 +12,7 @@ namespace Famoser\XKCD\Cache\Tests\ControllerTests;
 use Famoser\XKCD\Cache\Tests\ControllerTests\Base\ApiTestController;
 
 /**
- * tests the user controller methods
+ * tests the api controller methods
  * @package Famoser\XKCD\Cache\Tests\ControllerTests
  */
 class ApiControllerTest extends ApiTestController
@@ -21,6 +21,14 @@ class ApiControllerTest extends ApiTestController
      * tests the refresh method
      */
     public function testRefresh()
+    {
+        static::assertTrue(true);
+    }
+
+    /**
+     * tests the refresh method
+     */
+    public function testStatus()
     {
         static::assertTrue(true);
     }

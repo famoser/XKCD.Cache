@@ -6,24 +6,10 @@
  * Time: 12:55
  */
 
-namespace Famoser\XKCD\Cache\Tests\TestHelpers;
+namespace Famoser\XKCD\Cache\Tests\Utils;
 
 
-use Famoser\XKCD\Cache\Framework\ContainerBase;
-use Famoser\XKCD\Cache\Models\Communication\Entities\Base\BaseCommunicationEntity;
-use Famoser\XKCD\Cache\Models\Communication\Entities\CollectionCommunicationEntity;
-use Famoser\XKCD\Cache\Models\Communication\Entities\SyncCommunicationEntity;
-use Famoser\XKCD\Cache\Models\Communication\Request\Base\BaseRequest;
-use Famoser\XKCD\Cache\Models\Communication\Request\CollectionEntityRequest;
-use Famoser\XKCD\Cache\Models\Communication\Request\SyncEntityRequest;
-use Famoser\XKCD\Cache\Entities\Base\BaseSyncEntity;
-use Famoser\XKCD\Cache\Entities\Collection;
-use Famoser\XKCD\Cache\Entities\Comic;
-use Famoser\XKCD\Cache\Entities\ContentVersion;
-use Famoser\XKCD\Cache\Entities\Entity;
-use Famoser\XKCD\Cache\XKCDCacheApp;
 use Famoser\XKCD\Cache\Tests\ControllerTests\Base\ApiTestController;
-use Famoser\XKCD\Cache\Types\ContentType;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -170,31 +156,5 @@ class AssertHelper
         $testingUnit->assertContains("\"error_message\":" . $expectedApiError, $responseString);
 
         return $responseString;
-    }
-
-    /**
-     * check if a saved entity exists & check if properties match
-     *
-     * @param ApiTestController $testController
-     * @param XKCDCacheApp $testApp
-     * @param $entity
-     * @param $entityVersion
-     * @internal param ApiTestController $this
-     * @internal param SyncApiApp $getTestApp
-     */
-    private static function checkForSavedSyncEntity(
-        ApiTestController $testController,
-        $num,
-        XKCDCacheApp $testApp)
-    {
-        $containerBase = new ContainerBase($testApp->getContainer());
-        $databaseService = $containerBase->getDatabaseService();
-        /* @var Comic $entity */
-        $entity = $databaseService->getSingleFromDatabase(
-            new Comic(),
-            "num = :num",
-            ["num" => $num]
-        );
-        $testController::assertNotNull($entity);
     }
 }

@@ -6,7 +6,7 @@
  * Time: 13:56
  */
 
-namespace Famoser\XKCD\Cache\Tests\TestHelpers\TestApp;
+namespace Famoser\XKCD\Cache\Tests\Utils\TestApp;
 
 
 use Famoser\XKCD\Cache\XKCDCacheApp;

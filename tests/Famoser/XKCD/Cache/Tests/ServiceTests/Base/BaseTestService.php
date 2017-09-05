@@ -10,8 +10,8 @@ namespace Famoser\XKCD\Cache\Tests\ServiceTests\Base;
 
 
 use Famoser\XKCD\Cache\Framework\ContainerBase;
-use Famoser\XKCD\Cache\Tests\TestHelpers\ApiTestHelper;
-use Famoser\XKCD\Cache\Tests\TestHelpers\FrontendTestHelper;
+use Famoser\XKCD\Cache\Tests\Utils\TestHelper\ApiTestHelper;
+use Famoser\XKCD\Cache\Tests\Utils\TestHelper\FrontendTestHelper;
 
 /**
  * a base class used for testing the services
@@ -39,7 +39,7 @@ class BaseTestService extends \PHPUnit_Framework_TestCase
     {
         return $this->getContainerBase()->getDatabaseService();
     }
-
+    
     public function setUp()
     {
         $this->testHelper = new ApiTestHelper();

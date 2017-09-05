@@ -10,7 +10,7 @@ namespace Famoser\XKCD\Cache\Tests\ModelTests;
 
 
 use Famoser\XKCD\Cache\Entities\Base\BaseEntity;
-use Famoser\XKCD\Cache\Tests\TestHelpers\ApiTestHelper;
+use Famoser\XKCD\Cache\Tests\Utils\TestHelper\ApiTestHelper;
 
 /**
  * tests the configuration of the models

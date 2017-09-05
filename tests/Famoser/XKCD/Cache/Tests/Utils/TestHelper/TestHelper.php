@@ -6,21 +6,22 @@
  * Time: 12:55
  */
 
-namespace Famoser\XKCD\Cache\Tests\TestHelpers\Base;
+namespace Famoser\XKCD\Cache\Tests\Utils\TestHelper;
 
 
 use Famoser\XKCD\Cache\Framework\ContainerBase;
 use Famoser\XKCD\Cache\Services\SettingService;
+use Famoser\XKCD\Cache\Tests\Utils\ReflectionHelper;
+use Famoser\XKCD\Cache\Tests\Utils\TestApp\TestXKCDCacheApp;
 use Famoser\XKCD\Cache\XKCDCacheApp;
-use Famoser\XKCD\Cache\Tests\TestHelpers\TestApp\TestXKCDCacheApp;
+use Slim\Http\Environment;
 
 /**
  * helps to test a Slim application
  * @package Famoser\XKCD\Cache\Tests\TestHelpers\Base
  */
-abstract class BaseTestHelper extends ContainerBase
+class TestHelper extends ContainerBase
 {
-
     /* @var XKCDCacheApp $testApp */
     private $testApp;
     /* @var array $config */
@@ -39,9 +40,6 @@ abstract class BaseTestHelper extends ContainerBase
 
         //use container to initialize parent
         parent::__construct($this->testApp->getContainer());
-
-        //prepare environment
-        $this->prepareDatabase();
     }
 
     /**
@@ -51,7 +49,7 @@ abstract class BaseTestHelper extends ContainerBase
     {
         //clean output buffer
         ob_end_clean();
-        //start again so phpunit does not throw risky exceptions (that motherf***er)
+        //start again so phpunit does not throw risky exceptions
         ob_start();
 
         //dispose database service (free up database connection)
@@ -89,12 +87,7 @@ abstract class BaseTestHelper extends ContainerBase
     {
         $containerBase = new ContainerBase($this->getTestApp()->getContainer());
         $srcPath = $containerBase->getSettingService()->getSrcPath();
-        $filePath = str_replace("\\", DIRECTORY_SEPARATOR, $nameSpace);
-        $res = [];
-        foreach (glob($srcPath . DIRECTORY_SEPARATOR . $filePath . DIRECTORY_SEPARATOR . "*.php") as $filename) {
-            $className = $nameSpace . "\\" . substr($filename, strrpos($filename, DIRECTORY_SEPARATOR) + 1, -4);
-            $res[] = new $className();
-        }
+        $res = ReflectionHelper::getClassInstancesInNamespace($nameSpace, $srcPath);
         $testCase::assertTrue(count($res) > 0);
         foreach ($res as $obj) {
             $testCase::assertTrue(is_object($obj));
@@ -128,8 +121,57 @@ abstract class BaseTestHelper extends ContainerBase
         }
     }
 
+
+    private $mockAlreadyCalled;
+
     /**
-     * prepare the database if needed
+     * mock a json POST request
+     * call app->run afterwards
+     *
+     * @param $relativeLink
+     * @param string|array $postData
+     * if null, a GET request will be sent.
+     * if array will be converted automatically to valid post data
+     * @param bool $autoReset
      */
-    abstract protected function prepareDatabase();
+    public function mockRequest($relativeLink, $postData = null, $autoReset = true)
+    {
+        if ($this->mockAlreadyCalled && $autoReset) {
+            $this->resetApplication();
+        }
+        $this->mockAlreadyCalled = true;
+
+        if (is_array($postData)) {
+            $posting = "";
+            foreach ($postData as $key => $value) {
+                $posting .= $key . "=" . urlencode($value) . "&";
+            }
+            $posting = substr($posting, 0, -1);
+        } else {
+            $posting = $postData;
+        }
+
+        if ($posting != null) {
+            $this->getTestApp()->overrideEnvironment(
+                Environment::mock(
+                    [
+                        'REQUEST_METHOD' => 'POST',
+                        'REQUEST_URI' => '/' . $relativeLink,
+                        'MOCK_POST_DATA' => $posting,
+                        'SERVER_NAME' => 'localhost',
+                        'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+                    ]
+                )
+            );
+        } else {
+            $this->getTestApp()->overrideEnvironment(
+                Environment::mock(
+                    [
+                        'REQUEST_URI' => '/' . $relativeLink,
+                        'SERVER_NAME' => 'localhost'
+                    ]
+                )
+            );
+        }
+    }
 }

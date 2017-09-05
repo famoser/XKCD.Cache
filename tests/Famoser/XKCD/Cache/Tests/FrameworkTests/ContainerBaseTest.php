@@ -15,8 +15,7 @@ use Famoser\XKCD\Cache\Services\Interfaces\DatabaseServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\LoggingServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\SettingServiceInterface;
 use Famoser\XKCD\Cache\Services\Interfaces\XKCDServiceInterface;
-use Famoser\XKCD\Cache\Services\SettingService;
-use Famoser\XKCD\Cache\Tests\TestHelpers\ApiTestHelper;
+use Famoser\XKCD\Cache\Tests\Utils\TestHelper\ApiTestHelper;
 use Slim\Interfaces\RouterInterface;
 use Slim\Views\Twig;
 

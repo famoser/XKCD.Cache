@@ -6,11 +6,11 @@
  * Time: 15:11
  */
 
-namespace Famoser\XKCD\Cache\Tests\TestHelpers;
+namespace Famoser\XKCD\Cache\Tests\Utils;
 
 
 use Famoser\XKCD\Cache\Entities\Comic;
-use Famoser\XKCD\Cache\Models\Communication\Response\XKCDJson;
+use Famoser\XKCD\Cache\Models\XKCD\XKCDJson;
 use Famoser\XKCD\Cache\Types\Downloader;
 use Famoser\XKCD\Cache\Types\DownloadStatus;
 
