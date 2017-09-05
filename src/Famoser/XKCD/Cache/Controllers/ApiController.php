@@ -88,6 +88,11 @@ class ApiController extends BaseController
      */
     public function refresh(Request $request, Response $response, $args)
     {
+        return $this->doRefresh($response);
+    }
+
+    protected function doRefresh(Response $response, $noLimit = false)
+    {
         $newestOnlineNumber = $this->getNewestOnlineNumber();
         if ($newestOnlineNumber === false) {
             throw new ServerException(ServerError::XKCD_CONNECTION_FAILED);
@@ -98,6 +103,9 @@ class ApiController extends BaseController
         $refreshCount = 0;
         if ($newestCachedNumber < $newestOnlineNumber) {
             $maxIterations = $this->getSettingService()->getMaxRefreshImages();
+            if ($noLimit) {
+                $maxIterations = 1000;
+            }
             $newestCachedNumber++;
             for (; $newestCachedNumber < $newestOnlineNumber && $maxIterations > 0; $newestCachedNumber++) {
                 $maxIterations--;
@@ -123,6 +131,20 @@ class ApiController extends BaseController
         }
 
         return $this->returnJson($response, $refreshResponse);
+    }
+
+    /**
+     * show basic info about this application
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return Response
+     * @throws ServerException
+     */
+    public function refreshNoLimit(Request $request, Response $response, $args)
+    {
+        return $this->doRefresh($response, true);
     }
 
     /**
