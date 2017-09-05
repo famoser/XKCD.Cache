@@ -68,4 +68,46 @@ class DatabaseServiceTest extends BaseTestService
         $res = $databaseService->getSingleByIdFromDatabase(new Comic(), $comic->id + 1);
         static::assertNull($res);
     }
+
+    /**
+     * tests the update method
+     */
+    public function testUpdate()
+    {
+        $databaseService = $this->getDatabaseService();
+        $comic = $this->insertTestComic($databaseService);
+
+        $res = $databaseService->getSingleByIdFromDatabase(new Comic(), $comic->id);
+        static::assertNotNull($res);
+
+        $comic->num += 1;
+        static::assertTrue($databaseService->saveToDatabase($comic));
+
+        $res = $databaseService->getSingleByIdFromDatabase(new Comic(), $comic->id);
+        static::assertNotNull($res);
+        static::assertEquals($comic->num, $res->num);
+    }
+
+    /**
+     * tests the execute methods
+     */
+    public function testExecute()
+    {
+        $databaseService = $this->getDatabaseService();
+        $comic = $this->insertTestComic($databaseService);
+
+        $res = $databaseService->executeAndCount("SELECT COUNT(*) FROM comics");
+        static::assertTrue($res == 1);
+
+        $res = $databaseService->countFromDatabase(new Comic());
+        static::assertTrue($res == 1);
+
+        static::assertTrue($databaseService->execute("DELETE FROM comics"));
+
+        $res = $databaseService->executeAndCount("SELECT COUNT(*) FROM comics");
+        static::assertTrue($res == 0);
+
+        $res = $databaseService->countFromDatabase(new Comic());
+        static::assertTrue($res == 0);
+    }
 }
