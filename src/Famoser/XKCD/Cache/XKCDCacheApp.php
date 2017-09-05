@@ -255,7 +255,7 @@ class XKCDCacheApp extends App
                     } else {
                         $resp->error_message = $error->getMessage();
                     }
-                    return $container['response']->withJson($resp);
+                    return $response->withJson($resp);
                 } else {
                     //general error page
                     $args = [];

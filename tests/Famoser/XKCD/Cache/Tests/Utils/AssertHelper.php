@@ -70,11 +70,12 @@ class AssertHelper
         ResponseInterface $response
     )
     {
+        $responseString = static::getResponseString($response);
+
         //valid status code
         $testingUnit->assertEquals(200, $response->getStatusCode());
 
         //no error in json response
-        $responseString = static::getResponseString($response);
         $testingUnit->assertNotContains("exception", $responseString);
 
         return $responseString;
@@ -136,14 +137,14 @@ class AssertHelper
      *
      * @param ApiTestController|\PHPUnit_Framework_TestCase $testingUnit
      * @param ResponseInterface $response
-     * @param int $expectedApiError
+     * @param string $expectedError
      * @param int $expectedCode
      * @return string
      */
     public static function checkForFailedApiResponse(
         ApiTestController $testingUnit,
         ResponseInterface $response,
-        $expectedApiError, $expectedCode = 500
+        $expectedError, $expectedCode = 500
     )
     {
         $responseString = static::getResponseString($response);
@@ -152,8 +153,8 @@ class AssertHelper
         $testingUnit->assertEquals($expectedCode, $response->getStatusCode());
 
         //no error in json response
-        $testingUnit->assertNotContains("\"successful\":false", $responseString);
-        $testingUnit->assertContains("\"error_message\":" . $expectedApiError, $responseString);
+        $testingUnit->assertContains("\"successful\":false", $responseString);
+        $testingUnit->assertContains($expectedError, $responseString);
 
         return $responseString;
     }

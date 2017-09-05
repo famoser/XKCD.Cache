@@ -63,7 +63,6 @@ class ApiControllerTest extends ApiTestController
      */
     protected function checkFullRefresh()
     {
-
         //arrange
         $this->getTestHelper()->mockFullRequest("1.0/refresh");
         $this->mockRefreshServices();
