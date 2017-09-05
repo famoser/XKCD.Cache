@@ -30,11 +30,11 @@
     "swiftmailer/swiftmailer": "@stable"
   },
   "require-dev": {
-    "codeclimate/php-test-reporter": "dev-master",
+    "codeclimate/php-test-reporter": "^0.4",
     "squizlabs/php_codesniffer": "2.*",
-    "deployer/recipes": "^3.1",
-    "deployer/deployer": "dev-master",
-    "codacy/coverage": "dev-master"
+    "deployer/recipes": "^6",
+    "deployer/deployer": "^4",
+    "codacy/coverage": "^1"
   },
   "autoload": {
     "psr-4": {
