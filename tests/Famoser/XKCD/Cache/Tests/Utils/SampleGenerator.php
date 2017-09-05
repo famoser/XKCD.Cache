@@ -47,16 +47,16 @@ class SampleGenerator
         $comic->img = "https://imgs.xkcd.com/comics/monty_hall.png";
         $comic->title = "Monty Hall";
         $comic->safe_title = "Monty Hall";
-        $comic->transcript = "[[A figure - Monty Hall - stands on stage, holding a microphone. There are three doors; two labelled \"A\" and \"C\", which are closed, and one that is being held open by Monty. There's a ramp to the right, down which a goat is being led by beret guy.]]\nBeret guy: ... and my yard has so much grass, and I'll teach you tricks, and...\nGoat: \u00c3\u00a2\u00c2\u0099\u00c2\u00a5\n\n{{Title text: A few minutes later, the goat from behind door C drives away in the car.}}";
+        $comic->transcript = "[[A figure - Monty Hall - stands on stage, holding a microphone.]]";
         $comic->alt = "A few minutes later, the goat from behind door C drives away in the car.";
-        $comic->news = "";
+        $comic->news = "no news here :(";
         $comic->publish_date = strtotime("25.10.2013");
         $comic->downloaded_by = Downloader::VERSION_1;
         $comic->download_date_time = time();
         $comic->status = DownloadStatus::SUCCESSFUL;
-        $comic->json = "{\"month\": \"10\", \"num\": 1282, \"link\": \"\", \"year\": \"2013\", \"news\": \"\", \"safe_title\": \"Monty Hall\", \"transcript\": \"[[A figure - Monty Hall - stands on stage, holding a microphone. There are three doors; two labelled \\\"A\\\" and \\\"C\\\", which are closed, and one that is being held open by Monty. There's a ramp to the right, down which a goat is being led by beret guy.]]\nBeret guy: ... and my yard has so much grass, and I'll teach you tricks, and...\nGoat: \u00c3\u00a2\u00c2\u0099\u00c2\u00a5\n\n{{Title text: A few minutes later, the goat from behind door C drives away in the car.}}\", \"alt\": \"A few minutes later, the goat from behind door C drives away in the car.\", \"img\": \"https://imgs.xkcd.com/comics/monty_hall.png\", \"title\": \"Monty Hall\", \"day\": \"25\"}";
-        $comic->link = "";
-        $comic->status_message = "";
+        $comic->json = "{\"month\": \"10\", \"num\": 1282, \"link\": \"\", \"year\": \"2013\", \"news\": \"\", \"safe_title\": \"Monty Hall\", \"transcript\": \"[[A figure - Monty Hall - stands on stage, holding a microphone. ]]\", \"alt\": \"A few minutes later, the goat from behind door C drives away in the car.\", \"img\": \"https://imgs.xkcd.com/comics/monty_hall.png\", \"title\": \"Monty Hall\", \"day\": \"25\"}";
+        $comic->link = "http://stuff.ch";
+        $comic->status_message = "my status message";
         return $comic;
     }
 

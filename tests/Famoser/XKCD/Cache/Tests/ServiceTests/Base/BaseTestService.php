@@ -39,7 +39,7 @@ class BaseTestService extends \PHPUnit_Framework_TestCase
     {
         return $this->getContainerBase()->getDatabaseService();
     }
-    
+
     public function setUp()
     {
         $this->testHelper = new ApiTestHelper();

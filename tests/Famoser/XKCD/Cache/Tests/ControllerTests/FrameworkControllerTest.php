@@ -21,17 +21,17 @@ class FrameworkControllerTest extends TestController
     {
         $this->getTestHelper()->mockRequest("", "postData");
         $response = $this->getTestHelper()->getTestApp()->run();
-        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
+        $responseStr = AssertHelper::checkForFailedResponse($this, $response, 404);
         static::assertContains("not find", $responseStr);
 
         $this->getTestHelper()->mockRequest("wrong_url");
         $response = $this->getTestHelper()->getTestApp()->run();
-        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
+        $responseStr = AssertHelper::checkForFailedResponse($this, $response, 404);
         static::assertContains("not find", $responseStr);
 
         $this->getTestHelper()->mockRequest("wrong_url", "postData");
         $response = $this->getTestHelper()->getTestApp()->run();
-        $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
+        $responseStr = AssertHelper::checkForFailedResponse($this, $response, 404);
         static::assertContains("not find", $responseStr);
     }
 }

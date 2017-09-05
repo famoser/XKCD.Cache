@@ -200,6 +200,7 @@ class XKCDCacheApp extends App
     {
         return function () use ($container, $apiError, $containerBase) {
             return function (ServerRequestInterface $request, ResponseInterface $response) use ($container, $apiError, $containerBase) {
+                $response = $response->withStatus(404);
 
                 /* @var LoggingServiceInterface $logger */
                 $logger = $containerBase->getLoggingService();
@@ -211,7 +212,7 @@ class XKCDCacheApp extends App
                     $resp = new BaseResponse();
                     $resp->successful = false;
                     $resp->error_message = ServerError::toString($apiError);
-                    return $response->withStatus(500)->withJson($resp);
+                    return $response->withJson($resp);
                 }
                 return $container['view']->render($response, 'public/not_found.html.twig', []);
             };
@@ -229,6 +230,8 @@ class XKCDCacheApp extends App
     {
         return function () use ($container, $containerBase) {
             return function (ServerRequestInterface $request, ResponseInterface $response, $error = null) use ($container, $containerBase) {
+                $response = $response->withStatus(500);
+
                 if ($error instanceof \Exception || $error instanceof \Throwable) {
                     $errorString = $error->getFile() . ' (' . $error->getLine() . ')\n' .
                         $error->getCode() . ': ' . $error->getMessage() . '\n' .
@@ -252,7 +255,7 @@ class XKCDCacheApp extends App
                     } else {
                         $resp->error_message = $error->getMessage();
                     }
-                    return $container['response']->withStatus(500)->withJson($resp);
+                    return $container['response']->withJson($resp);
                 } else {
                     //general error page
                     $args = [];

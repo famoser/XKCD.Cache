@@ -12,6 +12,7 @@ namespace Famoser\XKCD\Cache\Controllers;
 use Famoser\XKCD\Cache\Controllers\Base\FrontendController;
 use Famoser\XKCD\Cache\Entities\Comic;
 use Famoser\XKCD\Cache\Types\DownloadStatus;
+use Slim\Exception\NotFoundException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -33,7 +34,7 @@ class ComicController extends FrontendController
     public function index(Request $request, Response $response, $args)
     {
         $comics = $this->getDatabaseService()->getFromDatabase(new Comic(), null, null, "num");
-        return $this->renderTemplate($response, 'comics/list', $args + ["comics" => $comics]);
+        return $this->renderTemplate($response, 'comics/list', ["comics" => $comics]);
     }
 
     /**
@@ -46,8 +47,8 @@ class ComicController extends FrontendController
      */
     public function failed(Request $request, Response $response, $args)
     {
-        $comics = $this->getDatabaseService()->getFromDatabase(new Comic(), "status <> :status", ["status" => DownloadStatus::SUCCESSFUL], "num");
-        return $this->renderTemplate($response, 'comics/list', $args + ["comics" => $comics]);
+        $comics = $this->getDatabaseService()->getFromDatabase(new Comic(), "status <> " . DownloadStatus::SUCCESSFUL, [], "num");
+        return $this->renderTemplate($response, 'comics/list', ["comics" => $comics]);
     }
 
     /**
@@ -57,10 +58,14 @@ class ComicController extends FrontendController
      * @param Response $response
      * @param $args
      * @return mixed
+     * @throws NotFoundException
      */
     public function show(Request $request, Response $response, $args)
     {
         $comic = $this->getDatabaseService()->getSingleByIdFromDatabase(new Comic(), $args["id"]);
+        if (!$comic instanceof Comic) {
+            throw new NotFoundException($request, $response);
+        }
         $imagePublicPath = $this->getSettingService()->getImagePublicBasePath() . "/" . $comic->filename;
         return $this->renderTemplate($response, 'comics/show', $args + ["comic" => $comic, "image_public_path" => $imagePublicPath]);
     }
