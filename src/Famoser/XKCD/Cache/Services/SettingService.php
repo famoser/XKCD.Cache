@@ -30,7 +30,7 @@ class SettingService extends BaseService implements SettingServiceInterface
      * @param bool $testMode if set to true the database filename will be random
      * @return string[]
      */
-    public static function generateRecommendedSettings($basePath, $debugMode, $testMode)
+    public static function generateRecommendedSettings($basePath, $debugMode, $testMode = false)
     {
         $ds = DIRECTORY_SEPARATOR;
 
