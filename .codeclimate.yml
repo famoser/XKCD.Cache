@@ -5,9 +5,9 @@ engines:
   phpcodesniffer:
     enabled: true
     checks:
-        #disable Namespaces NamespaceDeclaration BlankLineAfter check as it does not work properly
-        Namespaces/NamespaceDeclarationSniff:
-            enabled: false
+      #disable Namespaces NamespaceDeclaration BlankLineAfter check as it does not work properly
+      PSR2 Namespaces NamespaceDeclaration BlankLineAfter:
+        enabled: false
   phpmd:
     enabled: true  
     checks:
@@ -23,4 +23,4 @@ engines:
 
 ratings:
   paths: ["src/Famoser/**/*"]
-exclude_paths: ["src/public/assets/**/*"]
+exclude_paths: ["src/public/assets/**/*", "tests/", "vendor/"]
