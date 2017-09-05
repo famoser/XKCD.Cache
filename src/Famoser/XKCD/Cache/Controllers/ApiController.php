@@ -88,10 +88,10 @@ class ApiController extends BaseController
      */
     public function refresh(Request $request, Response $response, $args)
     {
-        return $this->doRefresh($request, $response);
+        return $this->doRefresh($response);
     }
 
-    protected function doRefresh(Request $request, Response $response, $noLimit = false)
+    protected function doRefresh(Response $response, $noLimit = false)
     {
         $newestOnlineNumber = $this->getNewestOnlineNumber();
         if ($newestOnlineNumber === false) {
@@ -144,7 +144,7 @@ class ApiController extends BaseController
      */
     public function refreshNoLimit(Request $request, Response $response, $args)
     {
-        return $this->doRefresh($request, $response, true);
+        return $this->doRefresh($response, true);
     }
 
     /**
