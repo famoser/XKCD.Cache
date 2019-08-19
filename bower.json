@@ -1,6 +1,6 @@
 {
   "name": "famoser/xkcd-cache",
-  "homepage": "https://github.com/famoser/SyncApi.Webpage",
+  "homepage": "https://github.com/famoser/xkcd-cache",
   "authors": [
     "famoser <git@famoser.ch>"
   ],
@@ -11,12 +11,6 @@
     "SyncApi"
   ],
   "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "tests"
-  ],
   "dependencies": {
     "bootstrap": "3.3.6",
     "jquery-backstretch": "2.0.4"

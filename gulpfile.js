@@ -29,7 +29,8 @@ var browserSync = require('browser-sync');
 var watch_url = "http://localhost:8000/";
 
 var path = {
-    bower_path: "assets/vendor/",
+    bower_dependencies_path: ".build/vendor/",
+    build_path: ".build",
     publish_path: "public/dist/"
 };
 
@@ -49,24 +50,24 @@ var deploy_file_name = {
 
 var config = {
     js_src_dirs: [
-        path.bower_path + "jquery/dist/jquery.js",
-        path.bower_path + "bootstrap/dist/js/bootstrap.js",
-        path.bower_path + "jquery-backstretch/src/jquery.backstretch.js"
+        path.bower_dependencies_path + "jquery/dist/jquery.js",
+        path.bower_dependencies_path + "bootstrap/dist/js/bootstrap.js",
+        path.bower_dependencies_path + "jquery-backstretch/src/jquery.backstretch.js"
     ],
     js_bundle_name: "_bundle.js",
-    js_target_dir: deploy_paths.js + "pre/",
+    js_target_dir: path.build_path + "/js/",
 
     css_src_dirs: [
-        path.bower_path + "bootstrap/dist/css/bootstrap.css",
+        path.bower_dependencies_path + "bootstrap/dist/css/bootstrap.css",
         "assets/css/style.css"
     ],
     css_bundle_name: "_bundle.css",
-    css_target_dir: deploy_paths.css + "pre/",
+    css_target_dir: path.build_path + "/css/",
 
     font_src_dirs: [
-        path.bower_path + "bootstrap/dist/fonts/**/*"
+        path.bower_dependencies_path + "bootstrap/dist/fonts/**/*"
     ],
-    font_target_dir: deploy_paths.fonts + "pre/",
+    font_target_dir: path.build_path + "/fonts/",
 
     project_sass_src_dirs: [
         "assets/sass/**/*.sass"
