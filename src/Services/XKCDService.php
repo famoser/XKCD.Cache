@@ -9,6 +9,7 @@
 namespace Famoser\XKCDCache\Services;
 
 
+use Exception;
 use Famoser\XKCDCache\Exceptions\ServerException;
 use Famoser\XKCDCache\Models\XKCD\XKCDJson;
 use Famoser\XKCDCache\Services\Base\BaseService;
@@ -29,7 +30,7 @@ class XKCDService extends BaseService implements XKCDServiceInterface
         try {
             $newestJson = file_get_contents($url);
             return json_decode($newestJson);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->getLoggingService()->log("failed to fetch comic from xkcd: " . $ex);
             throw new ServerException(ServerError::CONNECTION_FAILED);
         }

@@ -9,6 +9,8 @@
 namespace Famoser\XKCDCache;
 
 
+use Closure;
+use Exception;
 use Famoser\XKCDCache\Controllers\ApiController;
 use Famoser\XKCDCache\Controllers\ComicController;
 use Famoser\XKCDCache\Controllers\DownloadController;
@@ -32,6 +34,7 @@ use Slim\Container;
 use Slim\Http\Environment;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
+use Throwable;
 
 /**
  * the sync api application, in one neat class :)
@@ -73,7 +76,7 @@ class XKCDCacheApp extends App
     /**
      * get the web app routes
      *
-     * @return \Closure
+     * @return Closure
      */
     private function getWebAppRoutes()
     {
@@ -96,7 +99,7 @@ class XKCDCacheApp extends App
     /**
      * get the api routes
      *
-     * @return \Closure
+     * @return Closure
      */
     private function getApiRoutes()
     {
@@ -193,7 +196,7 @@ class XKCDCacheApp extends App
      * @param ContainerInterface $container
      * @param ContainerBase $containerBase
      * @param $apiError
-     * @return \Closure
+     * @return Closure
      */
     private function createNotFoundHandlerClosure(ContainerInterface $container, ContainerBase $containerBase, $apiError)
     {
@@ -223,7 +226,7 @@ class XKCDCacheApp extends App
      *
      * @param ContainerInterface $container
      * @param ContainerBase $containerBase
-     * @return \Closure
+     * @return Closure
      */
     private function createErrorHandlerClosure(ContainerInterface $container, ContainerBase $containerBase)
     {
@@ -231,7 +234,7 @@ class XKCDCacheApp extends App
             return function (ServerRequestInterface $request, ResponseInterface $response, $error = null) use ($container, $containerBase) {
                 $response = $response->withStatus(500);
 
-                if ($error instanceof \Exception || $error instanceof \Throwable) {
+                if ($error instanceof Exception || $error instanceof Throwable) {
                     $errorString = $error->getFile() . ' (' . $error->getLine() . ')\n' .
                         $error->getCode() . ': ' . $error->getMessage() . '\n' .
                         $error->getTraceAsString();

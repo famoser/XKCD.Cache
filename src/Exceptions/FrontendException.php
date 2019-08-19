@@ -9,13 +9,14 @@
 namespace Famoser\XKCDCache\Exceptions;
 
 
+use Exception;
 use Famoser\XKCDCache\Types\FrontendError;
 
 /**
  * if an exception while displaying a page in the frontend occurs, this exception typ eis thrown
  * @package Famoser\XKCDCache\Exceptions
  */
-class FrontendException extends \Exception
+class FrontendException extends Exception
 {
     /**
      * FrontendException constructor.

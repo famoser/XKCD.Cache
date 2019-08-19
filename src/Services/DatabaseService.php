@@ -22,7 +22,7 @@ use PDO;
  */
 class DatabaseService extends BaseService implements DatabaseServiceInterface
 {
-    /* @var \PDO $database */
+    /* @var PDO $database */
     private $database;
 
     /**
@@ -38,7 +38,7 @@ class DatabaseService extends BaseService implements DatabaseServiceInterface
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
     private function getConnection()
     {

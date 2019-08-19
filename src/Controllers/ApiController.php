@@ -9,6 +9,7 @@
 namespace Famoser\XKCDCache\Controllers;
 
 
+use Exception;
 use Famoser\XKCDCache\Controllers\Base\BaseController;
 use Famoser\XKCDCache\Entities\Comic;
 use Famoser\XKCDCache\Exceptions\ServerException;
@@ -31,7 +32,6 @@ class ApiController extends BaseController
      * returns the newest XKCD comic
      * @param $number
      * @return bool
-     * @throws ServerException
      */
     private function cacheComic($number)
     {
@@ -39,7 +39,7 @@ class ApiController extends BaseController
             /* @var XKCDJson $myJsonObject */
             $myJsonObject = $this->getXKCDService()->getComic($number);
             return $this->getCacheService()->persistComic($myJsonObject);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->getLoggingService()->log("failed to cache comic: " . $ex);
         }
         return false;
@@ -49,6 +49,8 @@ class ApiController extends BaseController
      * the newest comic contained in cache
      *
      * @return int
+     * @throws ServerException
+     * @throws ServerException
      */
     private function getNewestCacheNumber()
     {
@@ -65,6 +67,8 @@ class ApiController extends BaseController
      * the newest comic available online
      *
      * @return int|bool
+     * @throws ServerException
+     * @throws ServerException
      */
     private function getNewestOnlineNumber()
     {
@@ -91,6 +95,12 @@ class ApiController extends BaseController
         return $this->doRefresh($response);
     }
 
+    /**
+     * @param Response $response
+     * @param bool $noLimit
+     * @return Response
+     * @throws ServerException
+     */
     protected function doRefresh(Response $response, $noLimit = false)
     {
         $newestOnlineNumber = $this->getNewestOnlineNumber();

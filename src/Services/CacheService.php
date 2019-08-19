@@ -9,6 +9,7 @@
 namespace Famoser\XKCDCache\Services;
 
 
+use Exception;
 use Famoser\XKCDCache\Entities\Comic;
 use Famoser\XKCDCache\Exceptions\ServerException;
 use Famoser\XKCDCache\Models\XKCD\XKCDJson;
@@ -17,6 +18,7 @@ use Famoser\XKCDCache\Services\Interfaces\CacheServiceInterface;
 use Famoser\XKCDCache\Types\Downloader;
 use Famoser\XKCDCache\Types\DownloadStatus;
 use Famoser\XKCDCache\Types\ServerError;
+use ZipArchive;
 
 class CacheService extends BaseService implements CacheServiceInterface
 {
@@ -30,10 +32,10 @@ class CacheService extends BaseService implements CacheServiceInterface
     public function createImageZip($number)
     {
         try {
-            $zip = new \ZipArchive();
+            $zip = new ZipArchive();
             $filename = $this->getSettingService()->getZipCachePath() . DIRECTORY_SEPARATOR . $number . ".zip";
 
-            if ($zip->open($filename, \ZipArchive::CREATE) !== true) {
+            if ($zip->open($filename, ZipArchive::CREATE) !== true) {
                 $this->getLoggingService()->log("could not create zip file at " . $filename);
             }
 
@@ -41,7 +43,7 @@ class CacheService extends BaseService implements CacheServiceInterface
             $this->getLoggingService()->log("created zip file with " . $zip->numFiles . " files. status: " . $zip->status);
             $zip->close();
             return true;
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->getLoggingService()->log("failed to create zip: " . $ex);
             throw new ServerException(ServerError::ZIP_FAILED);
         }
@@ -51,7 +53,6 @@ class CacheService extends BaseService implements CacheServiceInterface
      * returns the newest XKCD comic
      *
      * @return Comic
-     * @throws ServerException
      */
     public function getNewestComic()
     {
@@ -89,7 +90,7 @@ class CacheService extends BaseService implements CacheServiceInterface
             //download image
             $contents = file_get_contents($comic->img);
             file_put_contents($this->getSettingService()->getImageCachePath() . DIRECTORY_SEPARATOR . $comic->filename, $contents);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $comic->status = DownloadStatus::IMAGE_DOWNLOAD_FAILED;
             $this->getLoggingService()->log("could not download comic " . $XKCDComic->num . ": " . $ex);
         }
@@ -137,6 +138,8 @@ class CacheService extends BaseService implements CacheServiceInterface
      * returns false if none found
      *
      * @return int|false
+     * @throws ServerException
+     * @throws ServerException
      */
     public function getNewestZip()
     {

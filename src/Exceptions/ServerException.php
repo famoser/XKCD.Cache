@@ -9,6 +9,7 @@
 namespace Famoser\XKCDCache\Exceptions;
 
 
+use Exception;
 use Famoser\XKCDCache\Types\ServerError;
 
 /**
@@ -17,7 +18,7 @@ use Famoser\XKCDCache\Types\ServerError;
  * error message, but rather a 'sorry, but we can't continue' kind of behaviour
  * @package Famoser\XKCDCache\Exceptions
  */
-class ServerException extends \Exception
+class ServerException extends Exception
 {
     /**
      * ServerException constructor.
