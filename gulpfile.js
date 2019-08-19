@@ -29,8 +29,8 @@ var browserSync = require('browser-sync');
 var watch_url = "http://localhost:8000/";
 
 var path = {
-    bower_path: "src/public/assets/vendor/",
-    publish_path: "src/public/dist/"
+    bower_path: "assets/vendor/",
+    publish_path: "public/dist/"
 };
 
 var deploy_paths = {
@@ -58,7 +58,7 @@ var config = {
 
     css_src_dirs: [
         path.bower_path + "bootstrap/dist/css/bootstrap.css",
-        "src/public/assets/css/style.css"
+        "assets/css/style.css"
     ],
     css_bundle_name: "_bundle.css",
     css_target_dir: deploy_paths.css + "pre/",
@@ -69,17 +69,17 @@ var config = {
     font_target_dir: deploy_paths.fonts + "pre/",
 
     project_sass_src_dirs: [
-        "src/public/assets/sass/**/*.sass"
+        "assets/sass/**/*.sass"
     ],
     project_css_bundle_name: "_project_bundle.css",
 
     project_js_src_dirs: [
-        "src/public/assets/js/**/*.js"
+        "assets/js/**/*.js"
     ],
     project_js_bundle_name: "_project_bundle.js",
 
     project_font_src_dirs: [
-        "src/public/assets/fonts/**/*"
+        "assets/fonts/**/*"
     ]
 };
 /* ###CONFIG END### */

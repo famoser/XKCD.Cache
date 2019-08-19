@@ -1,22 +1,5 @@
 {
-  "name": "XKCD.Cache",
-  "version": "0.1.0",
-  "description": "XKCD Cache",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/famoser/XKCD.Cache.git"
-  },
-  "keywords": [
-    "office",
-    "online"
-  ],
-  "author": "Florian Moser <git@famoser.ch>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/famoser/XKCD.Cache/issues"
-  },
-  "homepage": "https://github.com/famoser/XKCD.Cache",
-  "devDependencies": {
+  "dependencies": {
     "browser-sync": "^2.12.3",
     "del": "^2.2.0",
     "gulp": "^3.9.1",

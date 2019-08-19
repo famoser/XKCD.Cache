@@ -1,7 +1,7 @@
 language: php
 
 php:
-    - 7.1
+    - "7.2"
     - nightly
 
 matrix:
@@ -9,11 +9,12 @@ matrix:
     - php: nightly
 
 install:
-    - composer install --dev
+    - composer install
+
+before_script:
+  - composer validate --strict
 
 after_script:
-  - ./vendor/bin/test-reporter
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
-  - ./vendor/bin/codacycoverage clover ./build/logs/clover.xml
  

@@ -1,5 +1,5 @@
 {
-  "name": "famoser/xkcd.cache",
+  "name": "famoser/xkcd-cache",
   "type": "application",
   "license": "MIT",
   "description": "This is a cache of the comics at XKCD.",
@@ -36,6 +36,11 @@
     "deployer/recipes": "^6",
     "deployer/deployer": "^4",
     "codacy/coverage": "^1"
+  },
+  "config": {
+    "platform": {
+      "php": "7.2"
+    }
   },
   "autoload": {
     "psr-4": {

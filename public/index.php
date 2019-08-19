@@ -11,15 +11,12 @@ use Famoser\XKCDCache\XKCDCacheApp;
 
 session_start();
 
-
 //generate base path
-$ds = DIRECTORY_SEPARATOR;
-$oneUp = ".." . $ds;
-$basePath = realpath(__DIR__ . "/" . $oneUp . $oneUp) . $ds;
+$basePath = realpath(__DIR__ .  DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR);
 
 $debugMode = file_exists(".dev");
 
-require '..' . $ds . '..' . $ds . 'vendor' . $ds . 'autoload.php';
+require '..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 $app = new XKCDCacheApp(
     [
