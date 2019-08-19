@@ -55,8 +55,6 @@ class XKCDCacheApp extends App
             )
         );
 
-        //add middleware (none)
-
         //add routes
         $this->group('', $this->getWebAppRoutes());
         $this->group('/1.0', $this->getApiRoutes());

@@ -8,6 +8,9 @@
     "cache",
     "api"
   ],
+  "scripts": {
+    "serve": "symfony serve --allow-http"
+  },
   "authors": [
     {
       "name": "Florian Moser",
