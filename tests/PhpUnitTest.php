@@ -9,11 +9,13 @@
 namespace Famoser\XKCDCache\Tests;
 
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * some php functionality tests
  * @package Famoser\XKCDCache\Tests
  */
-class PhpUnitTest extends \PHPUnit_Framework_TestCase
+class PhpUnitTest extends TestCase
 {
     public function testTesting()
     {

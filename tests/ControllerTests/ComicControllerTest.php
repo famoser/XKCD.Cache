@@ -29,15 +29,15 @@ class ComicControllerTest extends FrontendTestController
         $this->getTestHelper()->mockFullRequest("comics/");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("no comics", $responseStr);
+        static::assertStringContainsString("no comics", $responseStr);
 
         //check one comic
         $this->getTestHelper()->insertComic(12);
         $this->getTestHelper()->mockFullRequest("comics/");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("your cached comics", $responseStr);
-        static::assertContains("12", $responseStr);
+        static::assertStringContainsString("your cached comics", $responseStr);
+        static::assertStringContainsString("12", $responseStr);
 
         //check more comic
         $this->getTestHelper()->insertComic(312412);
@@ -45,8 +45,8 @@ class ComicControllerTest extends FrontendTestController
         $this->getTestHelper()->mockFullRequest("comics/");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("312412", $responseStr);
-        static::assertContains("81273123", $responseStr);
+        static::assertStringContainsString("312412", $responseStr);
+        static::assertStringContainsString("81273123", $responseStr);
     }
 
     /**
@@ -58,14 +58,14 @@ class ComicControllerTest extends FrontendTestController
         $this->getTestHelper()->mockFullRequest("comics/failed");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("no comics", $responseStr);
+        static::assertStringContainsString("no comics", $responseStr);
 
         //check one comic
         $this->getTestHelper()->insertComic(872138147, DownloadStatus::SUCCESSFUL);
         $this->getTestHelper()->mockFullRequest("/comics/failed");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("no comics", $responseStr);
+        static::assertStringContainsString("no comics", $responseStr);
 
         //check more comic
         $this->getTestHelper()->insertComic(312412, DownloadStatus::IMAGE_DOWNLOAD_FAILED);
@@ -74,9 +74,9 @@ class ComicControllerTest extends FrontendTestController
         $this->getTestHelper()->mockFullRequest("comics/failed");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains("312412", $responseStr);
-        static::assertContains("81273123", $responseStr);
-        static::assertContains("89123132", $responseStr);
+        static::assertStringContainsString("312412", $responseStr);
+        static::assertStringContainsString("81273123", $responseStr);
+        static::assertStringContainsString("89123132", $responseStr);
         static::assertTrue(strpos($responseStr, "872138147") === false);
     }
 
@@ -96,21 +96,21 @@ class ComicControllerTest extends FrontendTestController
         $this->getTestHelper()->mockFullRequest("/comics/show/" . $myComic->id);
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertContains((string)$myComic->num, $responseStr);
-        static::assertContains(DownloadStatus::toString($myComic->status), $responseStr);
-        static::assertContains(str_replace("\"","&quot;", $myComic->json), $responseStr);
-        static::assertContains($myComic->status_message, $responseStr);
-        static::assertContains($myComic->link, $responseStr);
-        static::assertContains(date("d.m.Y H:i", $myComic->download_date_time), $responseStr);
-        static::assertContains(date("d.m.Y", $myComic->publish_date), $responseStr);
-        static::assertContains(Downloader::toString($myComic->downloaded_by), $responseStr);
-        static::assertContains($myComic->alt, $responseStr);
-        static::assertContains($myComic->news, $responseStr);
-        static::assertContains($myComic->filename, $responseStr);
-        static::assertContains($myComic->img, $responseStr);
-        static::assertContains($myComic->title, $responseStr);
-        static::assertContains($myComic->safe_title, $responseStr);
-        static::assertContains($myComic->transcript, $responseStr);
+        static::assertStringContainsString((string)$myComic->num, $responseStr);
+        static::assertStringContainsString(DownloadStatus::toString($myComic->status), $responseStr);
+        static::assertStringContainsString(str_replace("\"","&quot;", $myComic->json), $responseStr);
+        static::assertStringContainsString($myComic->status_message, $responseStr);
+        static::assertStringContainsString($myComic->link, $responseStr);
+        static::assertStringContainsString(date("d.m.Y H:i", $myComic->download_date_time), $responseStr);
+        static::assertStringContainsString(date("d.m.Y", $myComic->publish_date), $responseStr);
+        static::assertStringContainsString(Downloader::toString($myComic->downloaded_by), $responseStr);
+        static::assertStringContainsString($myComic->alt, $responseStr);
+        static::assertStringContainsString($myComic->news, $responseStr);
+        static::assertStringContainsString($myComic->filename, $responseStr);
+        static::assertStringContainsString($myComic->img, $responseStr);
+        static::assertStringContainsString($myComic->title, $responseStr);
+        static::assertStringContainsString($myComic->safe_title, $responseStr);
+        static::assertStringContainsString($myComic->transcript, $responseStr);
 
         //check missing comic
         $this->getTestHelper()->mockFullRequest("comics/show/" . ($myComic->id + 1));

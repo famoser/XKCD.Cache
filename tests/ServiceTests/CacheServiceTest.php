@@ -25,14 +25,6 @@ use Famoser\XKCDCache\Tests\Utils\SampleGenerator;
 class CacheServiceTest extends BaseTestService
 {
     /**
-     * tests the get by id method
-     */
-    public function testCreateImageZip()
-    {
-
-    }
-
-    /**
      * tests the getById method
      */
     public function testGetById()

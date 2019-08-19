@@ -10,6 +10,7 @@ namespace Famoser\XKCDCache\Tests\Utils;
 
 
 use Famoser\XKCDCache\Tests\ControllerTests\Base\ApiTestController;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -35,12 +36,12 @@ class AssertHelper
      * check if request was successful
      * returns the tested response string
      *
-     * @param \PHPUnit_Framework_TestCase $testingUnit
+     * @param TestCase $testingUnit
      * @param ResponseInterface $response
      * @return string
      */
     public static function checkForSuccessfulApiResponse(
-        \PHPUnit_Framework_TestCase $testingUnit,
+        TestCase $testingUnit,
         ResponseInterface $response
     )
     {
@@ -50,8 +51,8 @@ class AssertHelper
         $testingUnit->assertEquals(200, $response->getStatusCode(), $responseString);
 
         //no error in json response
-        $testingUnit->assertContains("\"successful\":true", $responseString);
-        $testingUnit->assertContains("\"error_message\":null", $responseString);
+        $testingUnit->assertStringContainsString("\"successful\":true", $responseString);
+        $testingUnit->assertStringContainsString("\"error_message\":null", $responseString);
 
 
         return $responseString;
@@ -61,12 +62,12 @@ class AssertHelper
      * check if request was successful
      * returns the tested response string
      *
-     * @param \PHPUnit_Framework_TestCase $testingUnit
+     * @param TestCase $testingUnit
      * @param ResponseInterface $response
      * @return string
      */
     public static function checkForSuccessfulResponse(
-        \PHPUnit_Framework_TestCase $testingUnit,
+        TestCase $testingUnit,
         ResponseInterface $response
     )
     {
@@ -76,7 +77,7 @@ class AssertHelper
         $testingUnit->assertEquals(200, $response->getStatusCode());
 
         //no error in json response
-        $testingUnit->assertNotContains("exception", $responseString);
+        $testingUnit->assertStringNotContainsString("exception", $responseString);
 
         return $responseString;
     }
@@ -85,14 +86,14 @@ class AssertHelper
      * check if request was successful
      * returns the tested response string
      *
-     * @param \PHPUnit_Framework_TestCase $testingUnit
+     * @param TestCase $testingUnit
      * @param ResponseInterface $response
      * @param $redirectCode
      * @param $expectedLink
      * @return string
      */
     public static function checkForRedirectResponse(
-        \PHPUnit_Framework_TestCase $testingUnit,
+        TestCase $testingUnit,
         ResponseInterface $response,
         $redirectCode,
         $expectedLink
@@ -103,9 +104,9 @@ class AssertHelper
 
         //no error in json response
         $responseString = static::getResponseString($response);
-        $testingUnit->assertNotContains("Exception", $responseString);
+        $testingUnit->assertStringNotContainsString("Exception", $responseString);
         $testingUnit::assertEmpty($responseString);
-        $testingUnit::assertContains($expectedLink, $response->getHeaderLine("location"));
+        $testingUnit::assertStringContainsString($expectedLink, $response->getHeaderLine("location"));
 
         return $responseString;
     }
@@ -114,13 +115,13 @@ class AssertHelper
      * check if request failed (code != 200)
      * returns the tested response string
      *
-     * @param \PHPUnit_Framework_TestCase $testingUnit
+     * @param TestCase $testingUnit
      * @param ResponseInterface $response
      * @param int $expectedCode
      * @return string
      */
     public static function checkForFailedResponse(
-        \PHPUnit_Framework_TestCase $testingUnit,
+        TestCase $testingUnit,
         ResponseInterface $response,
         $expectedCode
     )
@@ -135,7 +136,7 @@ class AssertHelper
      * check if request was successful
      * returns the tested response string
      *
-     * @param ApiTestController|\PHPUnit_Framework_TestCase $testingUnit
+     * @param ApiTestController|TestCase $testingUnit
      * @param ResponseInterface $response
      * @param string $expectedError
      * @param int $expectedCode
@@ -153,8 +154,8 @@ class AssertHelper
         $testingUnit->assertEquals($expectedCode, $response->getStatusCode());
 
         //no error in json response
-        $testingUnit->assertContains("\"successful\":false", $responseString);
-        $testingUnit->assertContains($expectedError, $responseString);
+        $testingUnit->assertStringContainsString("\"successful\":false", $responseString);
+        $testingUnit->assertStringContainsString($expectedError, $responseString);
 
         return $responseString;
     }

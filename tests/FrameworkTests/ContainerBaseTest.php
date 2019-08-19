@@ -16,6 +16,7 @@ use Famoser\XKCDCache\Services\Interfaces\LoggingServiceInterface;
 use Famoser\XKCDCache\Services\Interfaces\SettingServiceInterface;
 use Famoser\XKCDCache\Services\Interfaces\XKCDServiceInterface;
 use Famoser\XKCDCache\Tests\Utils\TestHelper\ApiTestHelper;
+use PHPUnit\Framework\TestCase;
 use Slim\Interfaces\RouterInterface;
 use Slim\Views\Twig;
 
@@ -23,7 +24,7 @@ use Slim\Views\Twig;
  * test the container base
  * @package Famoser\XKCDCache\Tests\FrameworkTests
  */
-class ContainerBaseTest extends \PHPUnit_Framework_TestCase
+class ContainerBaseTest extends TestCase
 {
     public function testPropertiesCorrect()
     {

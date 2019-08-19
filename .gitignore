@@ -35,3 +35,5 @@ mail-*-*-*.txt
 
 build/
 .build
+
+.phpunit.result.cache

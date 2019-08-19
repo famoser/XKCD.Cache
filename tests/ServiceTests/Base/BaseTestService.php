@@ -12,12 +12,13 @@ namespace Famoser\XKCDCache\Tests\ServiceTests\Base;
 use Famoser\XKCDCache\Framework\ContainerBase;
 use Famoser\XKCDCache\Tests\Utils\TestHelper\ApiTestHelper;
 use Famoser\XKCDCache\Tests\Utils\TestHelper\FrontendTestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * a base class used for testing the services
  * @package Famoser\XKCDCache\Tests\ServiceTests\Base
  */
-class BaseTestService extends \PHPUnit_Framework_TestCase
+class BaseTestService extends TestCase
 {
     /* @var FrontendTestHelper $testHelper */
     protected $testHelper;
@@ -40,13 +41,13 @@ class BaseTestService extends \PHPUnit_Framework_TestCase
         return $this->getContainerBase()->getDatabaseService();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->testHelper = new ApiTestHelper();
 
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->testHelper->cleanEnvironment();
     }

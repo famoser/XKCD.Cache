@@ -28,8 +28,8 @@ class PublicControllerTest extends FrontendTestController
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
         //it must contain repo name & /comics link
-        static::assertContains("famoser/XKCD.Cache", $responseStr);
-        static::assertContains("/comics", $responseStr);
+        static::assertStringContainsString("famoser/XKCD.Cache", $responseStr);
+        static::assertStringContainsString("/comics", $responseStr);
 
         //check with one & more comic
         $this->getTestHelper()->insertComic(12);

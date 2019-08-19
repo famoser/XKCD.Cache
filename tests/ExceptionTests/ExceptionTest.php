@@ -13,12 +13,13 @@ use Famoser\XKCDCache\Exceptions\FrontendException;
 use Famoser\XKCDCache\Exceptions\ServerException;
 use Famoser\XKCDCache\Types\FrontendError;
 use Famoser\XKCDCache\Types\ServerError;
+use PHPUnit\Framework\TestCase;
 
 /**
  * test if the exceptions conform
  * @package Famoser\XKCDCache\Tests\ExceptionTests
  */
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
     /**
      * tests that exception error messages & codes are correct

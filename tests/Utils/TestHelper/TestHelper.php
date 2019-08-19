@@ -17,6 +17,7 @@ use Famoser\XKCDCache\Tests\Utils\ReflectionHelper;
 use Famoser\XKCDCache\Tests\Utils\TestApp\TestXKCDCacheApp;
 use Famoser\XKCDCache\XKCDCacheApp;
 use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 use Slim\Http\Environment;
 
 /**
@@ -78,25 +79,6 @@ class TestHelper extends ContainerBase
     }
 
     /**
-     * get an array of instances of all the classes in this exact namespace
-     *
-     * @param \PHPUnit_Framework_TestCase $testCase
-     * @param $nameSpace
-     * @return array
-     */
-    public function getClassInstancesInNamespace(\PHPUnit_Framework_TestCase $testCase, $nameSpace)
-    {
-        $containerBase = new ContainerBase($this->getTestApp()->getContainer());
-        $srcPath = $containerBase->getSettingService()->getSrcPath();
-        $res = ReflectionHelper::getClassInstancesInNamespace($nameSpace, $srcPath);
-        $testCase::assertTrue(count($res) > 0);
-        foreach ($res as $obj) {
-            $testCase::assertTrue(is_object($obj));
-        }
-        return $res;
-    }
-
-    /**
      * returns the test application app
      *
      * @return TestXKCDCacheApp
@@ -136,58 +118,6 @@ class TestHelper extends ContainerBase
      * @param bool $autoReset
      */
     public function mockFullRequest($relativeLink, $postData = null, $autoReset = true)
-    {
-        if ($this->mockAlreadyCalled && $autoReset) {
-            $this->resetApplication();
-        }
-        $this->mockAlreadyCalled = true;
-
-        if (is_array($postData)) {
-            $posting = "";
-            foreach ($postData as $key => $value) {
-                $posting .= $key . "=" . urlencode($value) . "&";
-            }
-            $posting = substr($posting, 0, -1);
-        } else {
-            $posting = $postData;
-        }
-
-        if ($posting != null) {
-            $this->getTestApp()->overrideEnvironment(
-                Environment::mock(
-                    [
-                        'REQUEST_METHOD' => 'POST',
-                        'REQUEST_URI' => '/' . $relativeLink,
-                        'MOCK_POST_DATA' => $posting,
-                        'SERVER_NAME' => 'localhost',
-                        'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
-                    ]
-                )
-            );
-        } else {
-            $this->getTestApp()->overrideEnvironment(
-                Environment::mock(
-                    [
-                        'REQUEST_URI' => '/' . $relativeLink,
-                        'SERVER_NAME' => 'localhost'
-                    ]
-                )
-            );
-        }
-    }
-
-
-    /**
-     * mock a json POST request
-     * call app->run afterwards
-     *
-     * @param $relativeLink
-     * @param string|array $postData
-     * if null, a GET request will be sent.
-     * if array will be converted automatically to valid post data
-     * @param bool $autoReset
-     */
-    public function mockRequest($relativeLink, $postData = null, $autoReset = true)
     {
         if ($this->mockAlreadyCalled && $autoReset) {
             $this->resetApplication();
