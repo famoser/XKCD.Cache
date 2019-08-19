@@ -1,9 +1,10 @@
 <?php
 namespace Deployer;
+
 require 'vendor/deployer/deployer/recipe/common.php';
 
 // Configuration
-set('repository', 'https://github.com/famoser/xkcd-cache.git');
+set('repository', 'git@github.com:famoser/xkcd-cache');
 set('shared_dirs', ["app/logs","app/data"]);
 set('writable_dirs', ['app/logs', 'app/cache', 'app/data']);
 set('clear_paths', ["app/cache"]);
@@ -16,12 +17,12 @@ set(
 );
 
 task('deploy:prod', function () {
-    run('cd {{release_path}} && cd src/public && echo NUL > .prod');
+    run('cd {{release_path}} && cd public && echo NUL > .prod');
 });
 
 
 // import servers
-serverList('servers.yml');
+inventory('servers.yml');
 
 desc('Deploy your project');
 task('deploy', [

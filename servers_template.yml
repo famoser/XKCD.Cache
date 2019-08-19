@@ -1,26 +1,18 @@
-production:
-  host: ftp.myserver.ch
-  port: 22
-  user: myuser
-  password: mypass
+.base: &base
+  hostname: HOST
+  user: USER
+  http_user: USER
   branch: master
-  stage: production
-  deploy_path: ~/www/deploy/cache.xkcd.myserver.ch/production
-
-testing:
-  host: ftp.myserver.ch
-  port: 22
-  user: myuser
-  password: mypass
-  branch: master
-  stage: testing
-  deploy_path: ~/www/deploy/cache.xkcd.myserver.ch/testing
+  deploy_path: ~/www/xkcd-cache.famoser.ch/{{stage}}
+  sshOptions:
+    StrictHostKeyChecking: no
 
 dev:
-  host: ftp.myserver.ch
-  port: 22
-  user: myuser
-  password: mypass
-  branch: develop
+  <<: *base
   stage: dev
-  deploy_path: ~/www/deploy/cache.xkcd.myserver.ch/dev
+  branch: dev
+
+production:
+  <<: *base
+  stage: production
+  branch: master
