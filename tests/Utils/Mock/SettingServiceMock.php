@@ -19,10 +19,15 @@ class SettingServiceMock extends SettingService implements SettingServiceInterfa
     /* @var ContainerInterface $container */
     private $container;
 
+    /**
+     * SettingServiceMock constructor.
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         parent::__construct($container);
+
+        $this->container = $container;
     }
 
     /**

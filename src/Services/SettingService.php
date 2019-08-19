@@ -18,10 +18,15 @@ class SettingService extends BaseService implements SettingServiceInterface
     /* @var ContainerInterface $container */
     private $container;
 
+    /**
+     * SettingService constructor.
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         parent::__construct($container);
+
+        $this->container = $container;
     }
 
     /**
@@ -34,23 +39,23 @@ class SettingService extends BaseService implements SettingServiceInterface
     {
         $ds = DIRECTORY_SEPARATOR;
 
-        $appBasePath = $basePath . "app" . $ds;
+        $appBasePath = $basePath . $ds . "app";
         $publicBasePath = $basePath . $ds . "public";
 
         if ($testMode) {
-            $dbConfig = ['db_path' => $appBasePath . "data" . $ds . "data" . uniqid() . ".db"];
+            $dbConfig = ['db_path' => $appBasePath . $ds . "data" . $ds . "data" . uniqid() . ".db"];
         } else {
-            $dbConfig = ['db_path' => $appBasePath . "data" . $ds . "data.db"];
+            $dbConfig = ['db_path' => $appBasePath . $ds . "data" . $ds . "data.db"];
         }
         return [
                 'displayErrorDetails' => $debugMode,
                 'debug_mode' => $debugMode,
-                'db_template_path' => $appBasePath . "data_templates" . $ds . "data_template.db",
-                'file_path' => $appBasePath . "files",
-                'cache_path' => $appBasePath . "cache",
-                'src_path' => $basePath . "src",
-                'log_file_path' => $appBasePath . "logs" . $ds . "log.log",
-                'template_path' => $appBasePath . "templates",
+                'db_template_path' => $appBasePath . $ds . "data_templates" . $ds . "data_template.db",
+                'file_path' => $appBasePath . $ds . "files",
+                'cache_path' => $appBasePath . $ds . "cache",
+                'src_path' => $basePath . $ds . "src",
+                'log_file_path' => $appBasePath . $ds . "logs" . $ds . "log.log",
+                'template_path' => $appBasePath . $ds . "templates",
                 'public_path' => $publicBasePath,
                 'image_cache_path' => $publicBasePath . $ds . "images" . $ds . "xkcd",
                 'image_public_base_path' => "/images/xkcd",
