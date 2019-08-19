@@ -9,7 +9,6 @@
 namespace Famoser\XKCDCache\Tests\Utils\TestHelper;
 
 
-use Deployer\Component\Version\Exception\InvalidStringRepresentationException;
 use Famoser\XKCDCache\Framework\ContainerBase;
 use Famoser\XKCDCache\Services\Interfaces\SettingServiceInterface;
 use Famoser\XKCDCache\Services\SettingService;
@@ -73,7 +72,7 @@ class TestHelper extends ContainerBase
      */
     private function constructConfig()
     {
-        $basePath = __DIR__ . DIRECTORY_SEPARATOR. ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR;
+        $basePath = __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "..";
 
         return SettingService::generateRecommendedSettings($basePath, true, true);
     }

@@ -12,7 +12,7 @@ use Famoser\XKCDCache\XKCDCacheApp;
 session_start();
 
 //generate base path
-$basePath = realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+$basePath = realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR);
 
 $debugMode = file_exists(".dev");
 

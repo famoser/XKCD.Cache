@@ -86,11 +86,10 @@ class ApiController extends BaseController
      *
      * @param Request $request
      * @param Response $response
-     * @param $args
      * @return Response
      * @throws ServerException
      */
-    public function refresh(Request $request, Response $response, $args)
+    public function refresh(/** @scrutinizer ignore-unused */ Request $request, Response $response)
     {
         return $this->doRefresh($response);
     }
@@ -148,11 +147,10 @@ class ApiController extends BaseController
      *
      * @param Request $request
      * @param Response $response
-     * @param $args
      * @return Response
      * @throws ServerException
      */
-    public function refreshNoLimit(Request $request, Response $response, $args)
+    public function refreshNoLimit(/** @scrutinizer ignore-unused */ Request $request, Response $response)
     {
         return $this->doRefresh($response, true);
     }
@@ -162,11 +160,10 @@ class ApiController extends BaseController
      *
      * @param Request $request
      * @param Response $response
-     * @param $args
      * @return Response
      * @throws ServerException
      */
-    public function status(Request $request, Response $response, $args)
+    public function status(/** @scrutinizer ignore-unused */ Request $request, Response $response)
     {
         $newestOnlineNumber = $this->getNewestOnlineNumber();
         if ($newestOnlineNumber === false) {

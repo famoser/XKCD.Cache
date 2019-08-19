@@ -25,7 +25,6 @@ class CacheServiceMock extends BaseService implements CacheServiceInterface
      *
      * @param $number
      * @return bool
-     * @throws ServerException
      */
     public function createImageZip($number)
     {
@@ -36,7 +35,6 @@ class CacheServiceMock extends BaseService implements CacheServiceInterface
      * returns the newest XKCD comic
      *
      * @return Comic
-     * @throws ServerException
      */
     public function getNewestComic()
     {

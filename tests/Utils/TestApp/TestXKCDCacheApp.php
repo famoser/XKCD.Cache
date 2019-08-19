@@ -13,14 +13,19 @@ use Famoser\XKCDCache\Framework\ContainerBase;
 use Famoser\XKCDCache\Services\Interfaces\CacheServiceInterface;
 use Famoser\XKCDCache\Services\Interfaces\SettingServiceInterface;
 use Famoser\XKCDCache\XKCDCacheApp;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Container;
+use Slim\Exception\MethodNotAllowedException;
+use Slim\Exception\NotFoundException;
 
 class TestXKCDCacheApp extends XKCDCacheApp
 {
     /**
      * makes application execution silent (no output in phpUnit console)
      * @param bool $silent
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
+     * @throws MethodNotAllowedException
+     * @throws NotFoundException
      */
     public function run($silent = false)
     {
@@ -34,7 +39,7 @@ class TestXKCDCacheApp extends XKCDCacheApp
      */
     public function overrideSettingService(SettingServiceInterface $settingService)
     {
-        $container[ContainerBase::SETTING_SERVICE_KEY] = function (Container $container) use ($settingService) {
+        $container[ContainerBase::SETTING_SERVICE_KEY] = function () use ($settingService) {
             return $settingService;
         };
     }
@@ -46,7 +51,7 @@ class TestXKCDCacheApp extends XKCDCacheApp
      */
     public function overrideCacheService(CacheServiceInterface $cacheService)
     {
-        $container[ContainerBase::CACHE_SERVICE_KEY] = function (Container $container) use ($cacheService) {
+        $container[ContainerBase::CACHE_SERVICE_KEY] = function () use ($cacheService) {
             return $cacheService;
         };
     }
