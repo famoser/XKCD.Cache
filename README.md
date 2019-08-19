@@ -2,7 +2,7 @@
 This is a cache of the comics at XKCD. It allows to download a zip with all published images in a single request. 
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) 
-[![Build Status](https://travis-ci.org/famoser/xkcd-cache.svg?branch=master)](https://travis-ci.org/famoser/xkcd-cache)
+[![CircleCI](https://circleci.com/gh/famoser/xkcd-cache.svg?style=svg)](https://circleci.com/gh/famoser/xkcd-cache)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/famoser/xkcd-cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/famoser/xkcd-cache/?branch=master)
 [![codecov](https://codecov.io/gh/famoser/xkcd-cache/branch/master/graph/badge.svg)](https://codecov.io/gh/famoser/xkcd-cache) 
 
