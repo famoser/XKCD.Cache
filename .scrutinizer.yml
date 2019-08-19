@@ -1,8 +1,8 @@
 build:
+  environment:
+    php: 7.2.13
   nodes:
     analysis:
-      environment:
-        php: 7.2.13
       project_setup:
         override: true
       tests:

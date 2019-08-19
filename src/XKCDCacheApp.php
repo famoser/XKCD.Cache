@@ -217,7 +217,7 @@ class XKCDCacheApp extends App
                     $resp->error_message = ServerError::toString($apiError);
                     return $response->withJson($resp);
                 }
-                
+
                 /** @var Twig $view */
                 $view = $container['view'];
                 return $view->render($response, 'public/not_found.html.twig', []);
