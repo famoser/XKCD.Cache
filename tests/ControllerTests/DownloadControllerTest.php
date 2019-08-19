@@ -43,7 +43,7 @@ class DownloadControllerTest extends ApiTestController
         $this->getTestHelper()->mockFullRequest("1.0/download/zip");
         $response = $this->getTestHelper()->getTestApp()->run();
         $responseStr = AssertHelper::checkForSuccessfulResponse($this, $response);
-        static::assertNotEmpty($responseStr);
+        static::assertNotEmpty($responseStr, $responseStr);
     }
 
     /**

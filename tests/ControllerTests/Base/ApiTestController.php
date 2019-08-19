@@ -52,8 +52,8 @@ class ApiTestController extends BaseTestController
         static::assertTrue($responseObj->refresh_pending);
         static::assertEquals(3, $responseObj->refresh_cap);
         static::assertEquals(3, $responseObj->refresh_count);
-        static::assertEmpty($responseObj->missing_json);
-        static::assertEmpty($responseObj->missing_images);
+        static::assertEmpty($responseObj->missing_json, var_dump($responseObj->missing_json));
+        static::assertEmpty($responseObj->missing_images, var_dump($responseObj->missing_images));
     }
 
     /**
