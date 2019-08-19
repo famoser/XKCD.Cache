@@ -34,3 +34,6 @@ jobs: # a collection of steps
 
       # execute unit tests
       - run: php vendor/bin/phpunit
+
+      # upload coverage for CI
+      - run: bash <(curl -s https://codecov.io/bash)
