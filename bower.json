@@ -4,11 +4,10 @@
   "authors": [
     "famoser <git@famoser.ch>"
   ],
-  "description": "SyncApi",
   "keywords": [
     "php",
-    "Webpage",
-    "SyncApi"
+    "cache",
+    "xkcd"
   ],
   "license": "MIT",
   "dependencies": {
