@@ -9,6 +9,8 @@
 namespace Famoser\XKCDCache\Tests\ControllerTests\Base;
 
 
+use Famoser\XKCDCache\Models\Response\RefreshResponse;
+use Famoser\XKCDCache\Tests\Utils\AssertHelper;
 use Famoser\XKCDCache\Tests\Utils\Mock\CacheServiceMock;
 use Famoser\XKCDCache\Tests\Utils\Mock\SettingServiceMock;
 use Famoser\XKCDCache\Tests\Utils\TestHelper\ApiTestHelper;
@@ -29,6 +31,29 @@ class ApiTestController extends BaseTestController
     protected function constructTestHelper()
     {
         return new ApiTestHelper();
+    }
+
+    /**
+     * test if refresh runs fully
+     */
+    protected function checkFullRefresh()
+    {
+        //arrange
+        $this->getTestHelper()->mockFullRequest("1.0/refresh");
+        $this->mockRefreshServices();
+
+        //act
+        $response = $this->getTestHelper()->getTestApp()->run();
+        $responseStr = AssertHelper::checkForSuccessfulApiResponse($this, $response);
+
+        //assert
+        /* @var RefreshResponse $responseObj */
+        $responseObj = json_decode($responseStr);
+        static::assertTrue($responseObj->refresh_pending);
+        static::assertEquals(3, $responseObj->refresh_cap);
+        static::assertEquals(3, $responseObj->refresh_count);
+        static::assertEmpty($responseObj->missing_json);
+        static::assertEmpty($responseObj->missing_images);
     }
 
     /**

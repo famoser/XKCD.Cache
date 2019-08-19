@@ -25,7 +25,7 @@ use Famoser\XKCDCache\Types\ServerError;
  * tests the api controller methods
  * @package Famoser\XKCDCache\Tests\ControllerTests
  */
-class DownloadControllerTest extends ApiControllerTest
+class DownloadControllerTest extends ApiTestController
 {
     /**
      * tests the refresh method
