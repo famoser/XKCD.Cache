@@ -31,11 +31,11 @@ class SettingService extends BaseService implements SettingServiceInterface
 
     /**
      * @param string $basePath
-     * @param boolean $debugMode
+     * @param bool $debugMode
      * @param bool $testMode if set to true the database filename will be random
-     * @return string[]
+     * @return mixed[]
      */
-    public static function generateRecommendedSettings($basePath, $debugMode, $testMode = false)
+    public static function generateRecommendedSettings(string $basePath, bool $debugMode, $testMode = false)
     {
         $ds = DIRECTORY_SEPARATOR;
 
@@ -67,7 +67,7 @@ class SettingService extends BaseService implements SettingServiceInterface
     /**
      * get the array with all the settings
      *
-     * @return string[]
+     * @return mixed[]
      */
     protected function getSettingArray()
     {

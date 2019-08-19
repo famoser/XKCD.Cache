@@ -51,7 +51,7 @@ interface CacheServiceInterface
     /**
      * returns the newest XKCD comic
      *
-     * @return Comic
+     * @return Comic|null
      * @throws ServerException
      */
     public function getNewestComic();

@@ -32,6 +32,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Container;
 use Slim\Http\Environment;
+use Slim\Http\Response;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Throwable;
@@ -201,7 +202,7 @@ class XKCDCacheApp extends App
     private function createNotFoundHandlerClosure(ContainerInterface $container, ContainerBase $containerBase, $apiError)
     {
         return function () use ($container, $apiError, $containerBase) {
-            return function (ServerRequestInterface $request, ResponseInterface $response) use ($container, $apiError, $containerBase) {
+            return function (ServerRequestInterface $request, Response $response) use ($container, $apiError, $containerBase) {
                 $response = $response->withStatus(404);
 
                 /* @var LoggingServiceInterface $logger */
@@ -216,7 +217,10 @@ class XKCDCacheApp extends App
                     $resp->error_message = ServerError::toString($apiError);
                     return $response->withJson($resp);
                 }
-                return $container['view']->render($response, 'public/not_found.html.twig', []);
+                
+                /** @var Twig $view */
+                $view = $container['view'];
+                return $view->render($response, 'public/not_found.html.twig', []);
             };
         };
     }

@@ -28,10 +28,9 @@ class ComicController extends FrontendController
      *
      * @param Request $request
      * @param Response $response
-     * @param $args
      * @return mixed
      */
-    public function index(Request $request, Response $response, $args)
+    public function index(/** @scrutinizer ignore-unused */ Request $request, Response $response)
     {
         $comics = $this->getDatabaseService()->getFromDatabase(new Comic(), null, null, "num");
         return $this->renderTemplate($response, 'comics/list', ["comics" => $comics]);
@@ -42,10 +41,9 @@ class ComicController extends FrontendController
      *
      * @param Request $request
      * @param Response $response
-     * @param $args
      * @return mixed
      */
-    public function failed(Request $request, Response $response, $args)
+    public function failed(/** @scrutinizer ignore-unused */ Request $request, Response $response)
     {
         $comics = $this->getDatabaseService()->getFromDatabase(new Comic(), "status <> " . DownloadStatus::SUCCESSFUL, [], "num");
         return $this->renderTemplate($response, 'comics/list', ["comics" => $comics]);

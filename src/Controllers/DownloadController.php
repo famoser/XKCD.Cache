@@ -27,11 +27,10 @@ class DownloadController extends BaseController
      *
      * @param Request $request
      * @param Response $response
-     * @param $args
      * @return Response
      * @throws ServerException
      */
-    public function downloadZip(Request $request, Response $response, $args)
+    public function downloadZip(/** @scrutinizer ignore-unused */ Request $request, Response $response)
     {
         $newestComic = $this->getCacheService()->getNewestComic();
         if (!($newestComic instanceof Comic)) {
@@ -53,10 +52,9 @@ class DownloadController extends BaseController
      *
      * @param Request $request
      * @param Response $response
-     * @param $args
      * @return Response
      */
-    public function downloadJson(Request $request, Response $response, $args)
+    public function downloadJson(/** @scrutinizer ignore-unused */ Request $request, Response $response)
     {
         $jsonStart = "[";
         $jsonEnd = "]";

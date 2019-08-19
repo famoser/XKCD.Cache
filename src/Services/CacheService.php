@@ -52,7 +52,7 @@ class CacheService extends BaseService implements CacheServiceInterface
     /**
      * returns the newest XKCD comic
      *
-     * @return Comic
+     * @return Comic|null
      */
     public function getNewestComic()
     {

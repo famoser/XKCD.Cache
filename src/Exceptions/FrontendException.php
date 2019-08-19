@@ -20,9 +20,9 @@ class FrontendException extends Exception
 {
     /**
      * FrontendException constructor.
-     * @param string $frontendError
+     * @param int $frontendError
      */
-    public function __construct($frontendError)
+    public function __construct(int $frontendError)
     {
         parent::__construct(FrontendError::toString($frontendError), $frontendError, null);
     }

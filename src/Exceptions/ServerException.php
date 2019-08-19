@@ -22,9 +22,9 @@ class ServerException extends Exception
 {
     /**
      * ServerException constructor.
-     * @param string $serverError
+     * @param int $serverError
      */
-    public function __construct($serverError)
+    public function __construct(int $serverError)
     {
         parent::__construct(ServerError::toString($serverError), $serverError, null);
     }

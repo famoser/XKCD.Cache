@@ -28,7 +28,7 @@ class PublicController extends FrontendController
      * @param $args
      * @return mixed
      */
-    public function index(Request $request, Response $response, $args)
+    public function index(/** @scrutinizer ignore-unused */ Request $request, Response $response, $args)
     {
         return $this->renderTemplate($response, 'public/index', $args);
     }
