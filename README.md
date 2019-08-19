@@ -1,13 +1,11 @@
 # XKCD.Cache
 This is a cache of the comics at XKCD. It allows to download a zip with all published images in a single request. 
 
-this webapplication is used in http://github.com/famoser/XKCD
-
 [![Travis Build Status](https://travis-ci.org/famoser/XKCD.Cache.svg?branch=master)](https://travis-ci.org/famoser/XKCD.Cache)
 [![Code Climate](https://codeclimate.com/github/famoser/XKCD.Cache/badges/gpa.svg)](https://codeclimate.com/github/famoser/XKCD.Cache)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0049282fe1b3437ba8321ec244a3ea93)](https://www.codacy.com/app/famoser/XKCD.Cache)
-[![Scrutinizer](https://scrutinizer-ci.com/g/famoser/XKCD.Cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/famoser/XKCD.Cache)
-[![Test Coverage](https://codeclimate.com/github/famoser/XKCD.Cache/badges/coverage.svg)](https://codeclimate.com/github/famoser/XKCD.Cache/coverage)
+[![Scrutinizer](https://scrutinizer-ci.com/g/famoser/xkcd.cache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/famoser/XKCD.Cache)
+[![Test Coverage](https://codeclimate.com/github/famoser/xkcd.cache/badges/coverage.svg)](https://codeclimate.com/github/famoser/XKCD.Cache/coverage)
 
 ## Endnodes
 

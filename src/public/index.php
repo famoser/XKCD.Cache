@@ -6,8 +6,8 @@
  * Time: 22:40
  */
 
-use Famoser\XKCD\Cache\Services\SettingService;
-use Famoser\XKCD\Cache\XKCDCacheApp;
+use Famoser\XKCDCache\Services\SettingService;
+use Famoser\XKCDCache\XKCDCacheApp;
 
 session_start();
 
