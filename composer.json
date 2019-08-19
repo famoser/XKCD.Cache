@@ -39,7 +39,8 @@
     "phpunit/phpunit": "^8",
     "squizlabs/php_codesniffer": "2.*",
     "deployer/recipes": "^6",
-    "deployer/deployer": "^4"
+    "deployer/deployer": "^4",
+    "sensiolabs/security-checker": "^5.0"
   },
   "config": {
     "platform": {
