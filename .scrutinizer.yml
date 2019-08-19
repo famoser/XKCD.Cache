@@ -1,19 +1,26 @@
 build:
-    nodes:
-        analysis:
-            environment:
-                node: v10.13
-            project_setup:
-                override: true
-            tests:
-                override:
-                    - php-scrutinizer-run --enable-security-analysis
+  nodes:
+    analysis:
+      environment:
+        node: v10.13
+      project_setup:
+        override: true
+      tests:
+        override:
+          - php-scrutinizer-run --enable-security-analysis
+
+    coverage:
+      tests:
+        override:
+          - command: php vendor/bin/phpunit
+            coverage:
+              file: build/logs/clover.xml
+              format: clover
 
 checks:
-    php:
-        code_rating: true
-        duplication: true
+  php:
+    code_rating: true
+    duplication: true
 
 filter:
-    paths: ["src/*"]
-    excluded_paths: ["src/Migrations/*"]
+  paths: ["src/*"]

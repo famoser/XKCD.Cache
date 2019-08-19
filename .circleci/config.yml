@@ -34,6 +34,3 @@ jobs: # a collection of steps
 
       # execute unit tests
       - run: php vendor/bin/phpunit
-
-      # CI intergrations
-      - run: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
