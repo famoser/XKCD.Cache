@@ -35,7 +35,7 @@ class SettingService extends BaseService implements SettingServiceInterface
         $ds = DIRECTORY_SEPARATOR;
 
         $appBasePath = $basePath . "app" . $ds;
-        $publicBasePath = $basePath . "src" . $ds . "public";
+        $publicBasePath = $basePath . $ds . "public";
 
         if ($testMode) {
             $dbConfig = ['db_path' => $appBasePath . "data" . $ds . "data" . uniqid() . ".db"];

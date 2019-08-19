@@ -22,7 +22,7 @@ use ReflectionClass;
  */
 class ErrorTypesTest extends \PHPUnit_Framework_TestCase
 {
-    const ERROR_NAMESPACE = "Famoser\\XKCD\\Cache\\Types\\";
+    const ERROR_NAMESPACE = "Famoser\\XKCDCache\\Types\\";
 
     /**
      * tests that all error descriptions for the different download status are unique
