@@ -235,7 +235,7 @@ class XKCDCacheApp extends App
     private function createErrorHandlerClosure(ContainerInterface $container, ContainerBase $containerBase)
     {
         return function () use ($container, $containerBase) {
-            return function (ServerRequestInterface $request, ResponseInterface $response, $error = null) use ($container, $containerBase) {
+            return function (ServerRequestInterface $request, Response $response, $error = null) use ($container, $containerBase) {
                 $response = $response->withStatus(500);
 
                 if ($error instanceof Exception || $error instanceof Throwable) {
@@ -261,6 +261,7 @@ class XKCDCacheApp extends App
                     } else {
                         $resp->error_message = $error->getMessage();
                     }
+
                     return $response->withJson($resp);
                 } else {
                     //general error page
@@ -270,7 +271,10 @@ class XKCDCacheApp extends App
                     } else {
                         $args['error'] = "";
                     }
-                    return $container['view']->render($response, 'public/server_error.html.twig', $args);
+
+                    /** @var Twig $view */
+                    $view = $container['view'];
+                    return $view->render($response, 'public/server_error.html.twig', $args);
                 }
             };
         };
